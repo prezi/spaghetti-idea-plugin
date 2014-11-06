@@ -11,6 +11,6 @@ public class SpaghettiModuleTokenType extends IElementType {
 
     @Override
     public String toString() {
-        return "SimpleTokenType." + super.toString();
+        return "SpaghettiModuleTokenType." + super.toString();
     }
 }
