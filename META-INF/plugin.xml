@@ -39,5 +39,7 @@
   <extensions defaultExtensionNs="com.intellij">
     <!-- Add your extensions here -->
       <fileTypeFactory implementation="com.prezi.intellij.spaghetti.SpaghettiModuleFileTypeFactory"/>
+      <lang.parserDefinition language="SpaghettiModule" implementationClass="com.prezi.intellij.spaghetti.SpaghettiModuleParserDefinition"/>
+
   </extensions>
 </idea-plugin>
