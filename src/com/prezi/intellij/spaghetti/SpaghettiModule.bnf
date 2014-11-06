@@ -26,6 +26,7 @@
 	module = 'module'
 	import = 'import'
 	extern = 'extern'
+	extends = 'extends'
 	interface = 'interface'
   	void = 'void'
   	any = 'any'
@@ -52,14 +53,26 @@ SpaghettiModuleDefinition ::=
 
 moduleSpec ::= qualifiedName (AS ID)?
 
-moduleElement ::= importDeclaration | externTypeDefinition | moduleMethodDefinition
-
+moduleElement ::= importDeclaration | externTypeDefinition | typeDefinition | moduleMethodDefinition
 
 importDeclaration ::= import qualifiedName (AS ID)?
 
 externTypeDefinition ::= 'extern' 'interface' qualifiedName
 
-moduleMethodDefinition ::= methodDefinition
+typeDefinition ::= interfaceDefinition // TODO | structDefinition | constDefinition	| enumDefinition
+
+interfaceDefinition ::=
+ 	/* ( documentation = Doc )? */
+ 	annotations?
+	interface ID typeParameters?
+	( extends superInterfaceDefinition ( ',' superInterfaceDefinition )* )?
+	'{' interfaceMethodDefinition* '}'
+
+superInterfaceDefinition ::= qualifiedName typeArguments?
+
+interfaceMethodDefinition ::= annotations? methodDefinition
+
+moduleMethodDefinition ::= annotations? methodDefinition
 
 methodDefinition ::= typeParameters? returnType ID '(' methodParameters? ')'
 
