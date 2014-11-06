@@ -1,5 +1,5 @@
 
-package com.simpleplugin;
+package com.prezi.intellij.spaghetti;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
