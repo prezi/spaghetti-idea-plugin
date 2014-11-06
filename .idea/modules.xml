@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SimplePlugin.iml" filepath="$PROJECT_DIR$/SimplePlugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spaghetti-idea-plugin.iml" filepath="$PROJECT_DIR$/spaghetti-idea-plugin.iml" />
     </modules>
   </component>
 </project>
