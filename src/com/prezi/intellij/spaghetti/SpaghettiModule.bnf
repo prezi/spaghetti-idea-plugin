@@ -28,6 +28,7 @@
 	extern = 'extern'
 	extends = 'extends'
 	interface = 'interface'
+	struct = 'struct'
   	void = 'void'
   	any = 'any'
   	bool = 'bool'
@@ -59,14 +60,20 @@ importDeclaration ::= import qualifiedName (AS ID)?
 
 externTypeDefinition ::= extern interface qualifiedName
 
-typeDefinition ::= interfaceDefinition // TODO | structDefinition | constDefinition	| enumDefinition
+typeDefinition ::= interfaceDefinition | structDefinition // | constDefinition	| enumDefinition
 
 interfaceDefinition ::=
- 	/* ( documentation = Doc )? */
  	annotations?
 	interface ID typeParameters?
 	( extends superInterfaceDefinition ( ',' superInterfaceDefinition )* )?
 	'{' interfaceMethodDefinition* '}'
+
+structDefinition ::=
+	annotations?
+	struct ID typeParameters?
+	'{' propertyDefinition* '}'
+
+propertyDefinition ::= annotations?	OPTIONAL? typeNamePair
 
 superInterfaceDefinition ::= qualifiedName typeArguments?
 
