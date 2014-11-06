@@ -4,6 +4,8 @@ package com.prezi.intellij.spaghetti.psi;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.PsiElement;
 import com.intellij.lang.ASTNode;
+import com.prezi.intellij.spaghetti.SpaghettiModuleElementType;
+import com.prezi.intellij.spaghetti.SpaghettiModuleTokenType;
 import com.prezi.intellij.spaghetti.psi.impl.*;
 
 public interface SpaghettiModuleTypes {
