@@ -14,8 +14,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
-import com.prezi.intellij.spaghetti.SpaghettiModuleLanguage;
-import com.prezi.intellij.spaghetti._SpaghettiModuleLexer;
 import com.prezi.intellij.spaghetti.parser.SpaghettiModuleParser;
 import com.prezi.intellij.spaghetti.psi.SpaghettiModuleFile;
 import com.prezi.intellij.spaghetti.psi.SpaghettiModuleTypes;
@@ -25,7 +23,7 @@ import java.io.Reader;
 
 public class SpaghettiModuleParserDefinition implements ParserDefinition{
     public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
-    public static final TokenSet COMMENTS = TokenSet.create(SpaghettiModuleTypes.ANY); //BULSHIT!
+    public static final TokenSet COMMENTS = TokenSet.create(SpaghettiModuleTypes.COMMENT);
 
     public static final IFileElementType FILE = new IFileElementType(Language.<SpaghettiModuleLanguage>findInstance(SpaghettiModuleLanguage.class));
 
