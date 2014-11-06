@@ -40,4 +40,10 @@ public class SpaghettiModuleModuleElementImpl extends ASTWrapperPsiElement imple
     return findChildByClass(SpaghettiModuleModuleMethodDefinition.class);
   }
 
+  @Override
+  @Nullable
+  public SpaghettiModuleTypeDefinition getTypeDefinition() {
+    return findChildByClass(SpaghettiModuleTypeDefinition.class);
+  }
+
 }

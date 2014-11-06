@@ -7,6 +7,9 @@ import com.intellij.psi.PsiElement;
 
 public interface SpaghettiModuleExternTypeDefinition extends PsiElement {
 
+  @Nullable
+  SpaghettiModuleAnnotations getAnnotations();
+
   @NotNull
   SpaghettiModuleQualifiedName getQualifiedName();
 

@@ -11,14 +11,14 @@ import static com.prezi.intellij.spaghetti.psi.SpaghettiModuleTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.prezi.intellij.spaghetti.psi.*;
 
-public class SpaghettiModuleExternTypeDefinitionImpl extends ASTWrapperPsiElement implements SpaghettiModuleExternTypeDefinition {
+public class SpaghettiModuleConstEntryImpl extends ASTWrapperPsiElement implements SpaghettiModuleConstEntry {
 
-  public SpaghettiModuleExternTypeDefinitionImpl(ASTNode node) {
+  public SpaghettiModuleConstEntryImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof SpaghettiModuleVisitor) ((SpaghettiModuleVisitor)visitor).visitExternTypeDefinition(this);
+    if (visitor instanceof SpaghettiModuleVisitor) ((SpaghettiModuleVisitor)visitor).visitConstEntry(this);
     else super.accept(visitor);
   }
 
@@ -30,20 +30,8 @@ public class SpaghettiModuleExternTypeDefinitionImpl extends ASTWrapperPsiElemen
 
   @Override
   @NotNull
-  public SpaghettiModuleQualifiedName getQualifiedName() {
-    return findNotNullChildByClass(SpaghettiModuleQualifiedName.class);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getExtern() {
-    return findNotNullChildByType(EXTERN);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getInterface() {
-    return findNotNullChildByType(INTERFACE);
+  public SpaghettiModuleConstEntryDecl getConstEntryDecl() {
+    return findNotNullChildByClass(SpaghettiModuleConstEntryDecl.class);
   }
 
 }

@@ -11,27 +11,27 @@ import static com.prezi.intellij.spaghetti.psi.SpaghettiModuleTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.prezi.intellij.spaghetti.psi.*;
 
-public class SpaghettiModuleModuleMethodDefinitionImpl extends ASTWrapperPsiElement implements SpaghettiModuleModuleMethodDefinition {
+public class SpaghettiModuleAnnotationParametersImpl extends ASTWrapperPsiElement implements SpaghettiModuleAnnotationParameters {
 
-  public SpaghettiModuleModuleMethodDefinitionImpl(ASTNode node) {
+  public SpaghettiModuleAnnotationParametersImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof SpaghettiModuleVisitor) ((SpaghettiModuleVisitor)visitor).visitModuleMethodDefinition(this);
+    if (visitor instanceof SpaghettiModuleVisitor) ((SpaghettiModuleVisitor)visitor).visitAnnotationParameters(this);
     else super.accept(visitor);
   }
 
   @Override
-  @Nullable
-  public SpaghettiModuleAnnotations getAnnotations() {
-    return findChildByClass(SpaghettiModuleAnnotations.class);
+  @NotNull
+  public List<SpaghettiModuleAnnotationParameter> getAnnotationParameterList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, SpaghettiModuleAnnotationParameter.class);
   }
 
   @Override
-  @NotNull
-  public SpaghettiModuleMethodDefinition getMethodDefinition() {
-    return findNotNullChildByClass(SpaghettiModuleMethodDefinition.class);
+  @Nullable
+  public SpaghettiModuleAnnotationValue getAnnotationValue() {
+    return findChildByClass(SpaghettiModuleAnnotationValue.class);
   }
 
 }

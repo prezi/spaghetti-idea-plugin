@@ -11,14 +11,14 @@ import static com.prezi.intellij.spaghetti.psi.SpaghettiModuleTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.prezi.intellij.spaghetti.psi.*;
 
-public class SpaghettiModuleMethodDefinitionImpl extends ASTWrapperPsiElement implements SpaghettiModuleMethodDefinition {
+public class SpaghettiModuleEnumDefinitionImpl extends ASTWrapperPsiElement implements SpaghettiModuleEnumDefinition {
 
-  public SpaghettiModuleMethodDefinitionImpl(ASTNode node) {
+  public SpaghettiModuleEnumDefinitionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof SpaghettiModuleVisitor) ((SpaghettiModuleVisitor)visitor).visitMethodDefinition(this);
+    if (visitor instanceof SpaghettiModuleVisitor) ((SpaghettiModuleVisitor)visitor).visitEnumDefinition(this);
     else super.accept(visitor);
   }
 
@@ -29,21 +29,9 @@ public class SpaghettiModuleMethodDefinitionImpl extends ASTWrapperPsiElement im
   }
 
   @Override
-  @Nullable
-  public SpaghettiModuleMethodParameters getMethodParameters() {
-    return findChildByClass(SpaghettiModuleMethodParameters.class);
-  }
-
-  @Override
   @NotNull
-  public SpaghettiModuleReturnType getReturnType() {
-    return findNotNullChildByClass(SpaghettiModuleReturnType.class);
-  }
-
-  @Override
-  @Nullable
-  public SpaghettiModuleTypeParameters getTypeParameters() {
-    return findChildByClass(SpaghettiModuleTypeParameters.class);
+  public List<SpaghettiModuleEnumValue> getEnumValueList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, SpaghettiModuleEnumValue.class);
   }
 
   @Override

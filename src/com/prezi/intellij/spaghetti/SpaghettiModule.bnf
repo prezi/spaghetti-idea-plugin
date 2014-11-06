@@ -1,5 +1,6 @@
 {
   parserClass="com.prezi.intellij.spaghetti.parser.SpaghettiModuleParser"
+  parserUtilClass="com.prezi.intellij.spaghetti.parser.SpaghettiModuleParserUtil"
 
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 

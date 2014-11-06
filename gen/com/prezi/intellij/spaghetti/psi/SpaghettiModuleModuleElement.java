@@ -16,4 +16,7 @@ public interface SpaghettiModuleModuleElement extends PsiElement {
   @Nullable
   SpaghettiModuleModuleMethodDefinition getModuleMethodDefinition();
 
+  @Nullable
+  SpaghettiModuleTypeDefinition getTypeDefinition();
+
 }

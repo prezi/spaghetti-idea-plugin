@@ -11,14 +11,14 @@ import static com.prezi.intellij.spaghetti.psi.SpaghettiModuleTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.prezi.intellij.spaghetti.psi.*;
 
-public class SpaghettiModuleMethodDefinitionImpl extends ASTWrapperPsiElement implements SpaghettiModuleMethodDefinition {
+public class SpaghettiModuleInterfaceDefinitionImpl extends ASTWrapperPsiElement implements SpaghettiModuleInterfaceDefinition {
 
-  public SpaghettiModuleMethodDefinitionImpl(ASTNode node) {
+  public SpaghettiModuleInterfaceDefinitionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof SpaghettiModuleVisitor) ((SpaghettiModuleVisitor)visitor).visitMethodDefinition(this);
+    if (visitor instanceof SpaghettiModuleVisitor) ((SpaghettiModuleVisitor)visitor).visitInterfaceDefinition(this);
     else super.accept(visitor);
   }
 
@@ -29,15 +29,15 @@ public class SpaghettiModuleMethodDefinitionImpl extends ASTWrapperPsiElement im
   }
 
   @Override
-  @Nullable
-  public SpaghettiModuleMethodParameters getMethodParameters() {
-    return findChildByClass(SpaghettiModuleMethodParameters.class);
+  @NotNull
+  public List<SpaghettiModuleInterfaceMethodDefinition> getInterfaceMethodDefinitionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, SpaghettiModuleInterfaceMethodDefinition.class);
   }
 
   @Override
   @NotNull
-  public SpaghettiModuleReturnType getReturnType() {
-    return findNotNullChildByClass(SpaghettiModuleReturnType.class);
+  public List<SpaghettiModuleSuperInterfaceDefinition> getSuperInterfaceDefinitionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, SpaghettiModuleSuperInterfaceDefinition.class);
   }
 
   @Override
@@ -50,6 +50,18 @@ public class SpaghettiModuleMethodDefinitionImpl extends ASTWrapperPsiElement im
   @NotNull
   public PsiElement getId() {
     return findNotNullChildByType(ID);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getExtends() {
+    return findChildByType(EXTENDS);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getInterface() {
+    return findNotNullChildByType(INTERFACE);
   }
 
 }

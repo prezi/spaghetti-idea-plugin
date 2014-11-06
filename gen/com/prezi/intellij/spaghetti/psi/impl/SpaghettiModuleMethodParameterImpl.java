@@ -11,21 +11,21 @@ import static com.prezi.intellij.spaghetti.psi.SpaghettiModuleTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.prezi.intellij.spaghetti.psi.*;
 
-public class SpaghettiModuleMethodParametersImpl extends ASTWrapperPsiElement implements SpaghettiModuleMethodParameters {
+public class SpaghettiModuleMethodParameterImpl extends ASTWrapperPsiElement implements SpaghettiModuleMethodParameter {
 
-  public SpaghettiModuleMethodParametersImpl(ASTNode node) {
+  public SpaghettiModuleMethodParameterImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof SpaghettiModuleVisitor) ((SpaghettiModuleVisitor)visitor).visitMethodParameters(this);
+    if (visitor instanceof SpaghettiModuleVisitor) ((SpaghettiModuleVisitor)visitor).visitMethodParameter(this);
     else super.accept(visitor);
   }
 
   @Override
   @NotNull
-  public List<SpaghettiModuleMethodParameter> getMethodParameterList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, SpaghettiModuleMethodParameter.class);
+  public SpaghettiModuleTypeNamePair getTypeNamePair() {
+    return findNotNullChildByClass(SpaghettiModuleTypeNamePair.class);
   }
 
 }

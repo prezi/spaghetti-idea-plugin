@@ -11,21 +11,27 @@ import static com.prezi.intellij.spaghetti.psi.SpaghettiModuleTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.prezi.intellij.spaghetti.psi.*;
 
-public class SpaghettiModulePrimitiveTypeImpl extends ASTWrapperPsiElement implements SpaghettiModulePrimitiveType {
+public class SpaghettiModuleConstEntryDeclImpl extends ASTWrapperPsiElement implements SpaghettiModuleConstEntryDecl {
 
-  public SpaghettiModulePrimitiveTypeImpl(ASTNode node) {
+  public SpaghettiModuleConstEntryDeclImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof SpaghettiModuleVisitor) ((SpaghettiModuleVisitor)visitor).visitPrimitiveType(this);
+    if (visitor instanceof SpaghettiModuleVisitor) ((SpaghettiModuleVisitor)visitor).visitConstEntryDecl(this);
     else super.accept(visitor);
   }
 
   @Override
   @Nullable
-  public PsiElement getAny() {
-    return findChildByType(ANY);
+  public SpaghettiModuleBoolValue getBoolValue() {
+    return findChildByClass(SpaghettiModuleBoolValue.class);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getId() {
+    return findNotNullChildByType(ID);
   }
 
   @Override
@@ -42,14 +48,32 @@ public class SpaghettiModulePrimitiveTypeImpl extends ASTWrapperPsiElement imple
 
   @Override
   @Nullable
+  public PsiElement getFloatValue() {
+    return findChildByType(FLOATVALUE);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getInt() {
     return findChildByType(INT);
   }
 
   @Override
   @Nullable
+  public PsiElement getIntValue() {
+    return findChildByType(INTVALUE);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getString() {
     return findChildByType(STRING);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getStringValue() {
+    return findChildByType(STRINGVALUE);
   }
 
 }

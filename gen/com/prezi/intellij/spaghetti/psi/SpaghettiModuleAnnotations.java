@@ -5,12 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface SpaghettiModuleModuleMethodDefinition extends PsiElement {
-
-  @Nullable
-  SpaghettiModuleAnnotations getAnnotations();
+public interface SpaghettiModuleAnnotations extends PsiElement {
 
   @NotNull
-  SpaghettiModuleMethodDefinition getMethodDefinition();
+  List<SpaghettiModuleAnnotation> getAnnotationList();
 
 }

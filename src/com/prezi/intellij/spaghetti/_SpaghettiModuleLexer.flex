@@ -22,26 +22,46 @@ EOL="\r"|"\n"|"\r\n"
 LINE_WS=[\ \t\f]
 WHITE_SPACE=({LINE_WS}|{EOL})+
 
+LINE_COMMENT="//".*
+BLOCK_COMMENT="/"\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*"/"
+INTVALUE=[0-9]+
+FLOATVALUE=[0-9]+(\.[0-9]*)
 ID=[a-zA-Z_0-9]*
+STRINGVALUE=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
 
 %%
 <YYINITIAL> {
   {WHITE_SPACE}        { return com.intellij.psi.TokenType.WHITE_SPACE; }
 
+  "?"                  { return OPTIONAL; }
+  "("                  { return PL; }
+  ")"                  { return PR; }
   "{"                  { return CL; }
   "}"                  { return CR; }
   "AS"                 { return AS; }
+  "const"              { return CONST; }
   "module"             { return MODULE; }
   "import"             { return IMPORT; }
   "extern"             { return EXTERN; }
+  "extends"            { return EXTENDS; }
   "interface"          { return INTERFACE; }
+  "struct"             { return STRUCT; }
   "void"               { return VOID; }
   "any"                { return ANY; }
+  "bool"               { return BOOL; }
+  "int"                { return INT; }
+  "float"              { return FLOAT; }
+  "string"             { return STRING; }
   "true"               { return TRUE; }
   "false"              { return FALSE; }
-  "methodParameter"    { return METHODPARAMETER; }
+  "null"               { return NULL; }
 
+  {LINE_COMMENT}       { return LINE_COMMENT; }
+  {BLOCK_COMMENT}      { return BLOCK_COMMENT; }
+  {INTVALUE}           { return INTVALUE; }
+  {FLOATVALUE}         { return FLOATVALUE; }
   {ID}                 { return ID; }
+  {STRINGVALUE}        { return STRINGVALUE; }
 
   [^] { return com.intellij.psi.TokenType.BAD_CHARACTER; }
 }

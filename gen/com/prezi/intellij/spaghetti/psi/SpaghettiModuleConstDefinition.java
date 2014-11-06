@@ -5,21 +5,18 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface SpaghettiModuleMethodDefinition extends PsiElement {
+public interface SpaghettiModuleConstDefinition extends PsiElement {
 
   @Nullable
   SpaghettiModuleAnnotations getAnnotations();
 
-  @Nullable
-  SpaghettiModuleMethodParameters getMethodParameters();
-
   @NotNull
-  SpaghettiModuleReturnType getReturnType();
-
-  @Nullable
-  SpaghettiModuleTypeParameters getTypeParameters();
+  List<SpaghettiModuleConstEntry> getConstEntryList();
 
   @NotNull
   PsiElement getId();
+
+  @NotNull
+  PsiElement getConst();
 
 }

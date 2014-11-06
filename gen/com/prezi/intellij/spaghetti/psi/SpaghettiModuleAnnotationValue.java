@@ -5,21 +5,18 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface SpaghettiModulePrimitiveType extends PsiElement {
+public interface SpaghettiModuleAnnotationValue extends PsiElement {
 
   @Nullable
-  PsiElement getAny();
+  SpaghettiModuleBoolValue getBoolValue();
 
   @Nullable
-  PsiElement getBool();
+  PsiElement getFloatValue();
 
   @Nullable
-  PsiElement getFloat();
+  PsiElement getIntValue();
 
   @Nullable
-  PsiElement getInt();
-
-  @Nullable
-  PsiElement getString();
+  PsiElement getStringValue();
 
 }
