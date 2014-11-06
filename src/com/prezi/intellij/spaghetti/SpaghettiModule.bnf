@@ -15,6 +15,8 @@
   psiImplUtilClass="com.prezi.intellij.spaghetti.psi.impl.SpaghettiModulePsiImplUtil"
 
   tokens=[
+    PL='('
+    PR=')'
   	CL = '{'
   	CR = '}'
   	AS = 'AS'
@@ -26,13 +28,16 @@
   	any = 'any'
   	true = 'true'
   	false = 'false'
+    intValue='regexp:\d+'
+  	floatValue='regexp:\d+(\.\d*)'
   	ID = 'regexp:\w*'
+    stringValue="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
   ]
 }
 
 SpaghettiModuleDefinition ::=
 //	comment?
-//	annotations?
+	annotations?
 	'module' moduleSpec
 	CL
 	moduleElement*
@@ -81,3 +86,13 @@ qualifiedName ::= ID ('.' ID)*
 typeParameters ::= '<' ID ( ',' ID )* '>'
 
 typeArguments ::= '<' returnType ( ',' returnType )* '>'
+
+annotations ::= annotation+
+
+annotation ::= '@' id (PL annotationParameters? PR)?
+
+annotationParameters ::= annotationValue | annotationParameter ( ',' annotationParameter )*
+
+annotationParameter ::= id '=' annotationValue
+
+annotationValue	::= null | boolType | intValue | floatValue | string
