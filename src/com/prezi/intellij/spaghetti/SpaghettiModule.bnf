@@ -59,7 +59,7 @@ moduleElement ::= importDeclaration | externTypeDefinition | typeDefinition | mo
 
 importDeclaration ::= import qualifiedName (AS ID)?
 
-externTypeDefinition ::= extern interface qualifiedName
+externTypeDefinition ::= annotations? extern interface qualifiedName
 
 typeDefinition ::= interfaceDefinition | structDefinition | constDefinition | enumDefinition
 
@@ -96,7 +96,7 @@ interfaceMethodDefinition ::= annotations? methodDefinition
 
 moduleMethodDefinition ::= annotations? methodDefinition
 
-methodDefinition ::= typeParameters? returnType ID '(' methodParameters? ')'
+methodDefinition ::= annotations? typeParameters? returnType ID '(' methodParameters? ')'
 
 methodParameters ::= methodParameter ( ',' methodParameter )*
 
