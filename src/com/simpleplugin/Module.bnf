@@ -1,0 +1,83 @@
+{
+  parserClass="com.prezi.intellij.spaghetti.parser.SpaghettiModuleParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="SpaghettiModule"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.prezi.intellij.spaghetti.psi"
+  psiImplPackage="com.prezi.intellij.spaghetti.psi.impl"
+
+  elementTypeHolderClass="com.prezi.intellij.spaghetti.psi.SpaghettiModuleTypes"
+  elementTypeClass="com.prezi.intellij.spaghetti.psi.SpaghettiModuleElementType"
+  tokenTypeClass="com.prezi.intellij.spaghetti.psi.SpaghettiModuleTokenType"
+
+  psiImplUtilClass="com.prezi.intellij.spaghetti.psi.impl.SpaghettiModulePsiImplUtil"
+
+  tokens=[
+  	CL = '{'
+  	CR = '}'
+  	AS = 'AS'
+	module = 'module'
+	import = 'import'
+	extern = 'extern'
+	interface = 'interface'
+  	void = 'void'
+  	any = 'any'
+  	true = 'true'
+  	false = 'false'
+  	ID = 'regexp:\w*'
+  ]
+}
+
+SpaghettiModuleDefinition ::=
+//	comment?
+//	annotations?
+	'module' moduleSpec
+	CL
+	moduleElement*
+	CR
+
+moduleSpec ::= qualifiedName (AS ID)?
+
+moduleElement ::= importDeclaration | externTypeDefinition | moduleMethodDefinition
+
+
+importDeclaration ::= import qualifiedName (AS ID)?
+
+externTypeDefinition ::= 'extern' 'interface' qualifiedName
+
+moduleMethodDefinition ::= methodDefinition
+
+methodDefinition ::= typeParameters? returnType ID '(' /* TODO methodParameters? */ ')'
+
+
+methodParameters ::= methodParameter ( ',' methodParameter )*
+
+returnType ::= void | complexType
+
+complexType ::= type | typeChain
+
+type ::= primitiveType ArrayQualifier* | objectType ArrayQualifier*
+
+typeChain ::= typeChainElements | '(' typeChainElements ')' ArrayQualifier+
+
+typeChainElements ::= void '->' typeChainReturnType | typeChainElement ( '->' typeChainElement )* '->' typeChainReturnType
+
+typeChainReturnType ::= void | typeChainElement
+
+typeChainElement ::= type | '(' typeChain ')'
+
+objectType ::= qualifiedName typeArguments?
+
+primitiveType ::=  any | boolType // TODO | int | float | string
+
+boolType ::= true | false
+
+ArrayQualifier ::= '[' ']'
+
+qualifiedName ::= ID ('.' ID)*
+
+typeParameters ::= '<' ID ( ',' ID )* '>'
+
+typeArguments ::= '<' returnType ( ',' returnType )* '>'
