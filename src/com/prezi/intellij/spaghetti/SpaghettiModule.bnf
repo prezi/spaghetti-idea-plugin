@@ -23,6 +23,7 @@
   	CL = '{'
   	CR = '}'
   	AS = 'AS'
+  	const = 'const'
 	module = 'module'
 	import = 'import'
 	extern = 'extern'
@@ -60,7 +61,7 @@ importDeclaration ::= import qualifiedName (AS ID)?
 
 externTypeDefinition ::= extern interface qualifiedName
 
-typeDefinition ::= interfaceDefinition | structDefinition // | constDefinition	| enumDefinition
+typeDefinition ::= interfaceDefinition | structDefinition | constDefinition | enumDefinition
 
 interfaceDefinition ::=
  	annotations?
@@ -72,6 +73,20 @@ structDefinition ::=
 	annotations?
 	struct ID typeParameters?
 	'{' propertyDefinition* '}'
+
+constDefinition ::= annotations? const ID '{' constEntry* '}'
+
+constEntry ::= annotations? constEntryDecl
+
+constEntryDecl ::=
+	bool? ID '=' boolValue
+	| int? ID '=' intValue
+	| float? ID '=' floatValue
+	| string? ID '=' stringValue
+
+enumDefinition ::= annotations? 'enum' ID '{'	enumValue* '}'
+
+enumValue ::= annotations? ID
 
 propertyDefinition ::= annotations?	OPTIONAL? typeNamePair
 
@@ -107,7 +122,7 @@ objectType ::= qualifiedName typeArguments?
 
 primitiveType ::=  any | bool | int | float | string
 
-boolType ::= true | false
+boolValue ::= true | false
 
 ArrayQualifier ::= '[' ']'
 
@@ -125,4 +140,4 @@ annotationParameters ::= annotationValue | annotationParameter ( ',' annotationP
 
 annotationParameter ::= id '=' annotationValue
 
-annotationValue	::= null | boolType | intValue | floatValue | stringValue
+annotationValue	::= null | boolValue | intValue | floatValue | stringValue
