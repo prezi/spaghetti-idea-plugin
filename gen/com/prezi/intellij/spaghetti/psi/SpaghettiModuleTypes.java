@@ -52,9 +52,9 @@ public interface SpaghettiModuleTypes {
 
   IElementType ANY = new SpaghettiModuleTokenType("any");
   IElementType AS = new SpaghettiModuleTokenType("AS");
-  IElementType BLOCK_COMMENT = new SpaghettiModuleTokenType("BLOCK_COMMENT");
   IElementType BOOL = new SpaghettiModuleTokenType("bool");
   IElementType CL = new SpaghettiModuleTokenType("{");
+  IElementType COMMENT = new SpaghettiModuleTokenType("COMMENT");
   IElementType CONST = new SpaghettiModuleTokenType("const");
   IElementType CR = new SpaghettiModuleTokenType("}");
   IElementType EXTENDS = new SpaghettiModuleTokenType("extends");
@@ -67,7 +67,6 @@ public interface SpaghettiModuleTypes {
   IElementType INT = new SpaghettiModuleTokenType("int");
   IElementType INTERFACE = new SpaghettiModuleTokenType("interface");
   IElementType INTVALUE = new SpaghettiModuleTokenType("intValue");
-  IElementType LINE_COMMENT = new SpaghettiModuleTokenType("LINE_COMMENT");
   IElementType MODULE = new SpaghettiModuleTokenType("module");
   IElementType NULL = new SpaghettiModuleTokenType("null");
   IElementType OPTIONAL = new SpaghettiModuleTokenType("?");

@@ -1,0 +1,726 @@
+/**
+ * Cet module.
+ */
+module prezi.cet as Cet
+
+import prezi.service.assetloader.MediaDownloader
+
+extern interface HTMLCanvasElement
+extern interface HTMLImageElement
+extern interface HTMLInputElement
+extern interface HTMLTextAreaElement
+extern interface HTMLDivElement
+extern interface Json
+extern interface ImageData
+extern interface CanvasRenderingContext2D
+extern interface CanvasGradient
+
+import prezi.engine.dom.IZIndex
+
+// Cet application definition and creation
+// ***************************************
+
+/** Main render appication */
+interface CetApplication
+{
+	// Life-cycle
+	void initializeLoop(prezi.bacon.Bus<bool> onFocusBus, IPathNavigator mainPathNavigator)
+	void startLoop()
+	void startOnDemandRendering(IPathNavigator pathNavigator)
+	SceneBuilder getSceneBuilder()
+	IStage createDerivedStage(int stageWidth, int stageHeight)
+	void attachIdleWorker(Worker worker)
+	void dispose()
+	void resetRenderer()
+	void setDocument(prezi.engine.dom.Prezi document)
+	prezi.engine.dom.Prezi getDocument()
+
+	// Event handling
+	void handleMainCanvasResize()
+	any getDownloadStatusObservable()
+	any getAssetLoadingObservable()
+	prezi.bacon.Observable<string> getSwfRenderableStream()
+
+	// Rendering
+	SceneRender getSceneRender()
+	UpdateableScene getBaseScene()
+	ZoomingStage getMainStage()
+
+	// Getters
+	any getFocusManager()
+	ISoundNavigator getSoundNavigator()
+	SpeedMeter getSpeedMeter()
+	SpeedMeasurement getSpeedMeasurement()
+	HTMLCanvasElement getCanvas()
+	HTMLDivElement getCanvasContainer()
+
+	void insertZObject_killme(prezi.engine.dom.ZObject zobject)
+}
+
+// domlayer is typeless from the beginning - originally created in PlayerUI
+CetApplication createCetApplication(
+	HTMLDivElement canvasContainer,
+	any domLayer,
+	bool debug,
+	bool hasWatermark,
+	prezi.engine.dom.Prezi document,
+	int startFromStep,
+	int startFromAction,
+	bool saveBitmapsToCache,
+	MediaDownloader mediaDownloader,
+	System[] baseSystems
+	)
+
+/** create CET application with no render loop */
+CetApplication createOnDemandCetApplication(
+		prezi.engine.dom.Prezi document,
+		int width,
+		int height,
+		CanvasFactory canvasFactory,
+		MediaDownloader mediaDownloader,
+		System[] baseSystems,
+		bool renderLogo,
+		bool watermark)
+
+MediaDownloader createOnlineMediaDownloader(prezi.engine.dom.Prezi document)
+
+
+/** Main render appication */
+interface CanvasFactory
+{
+	HTMLCanvasElement createMainCanvas()
+	HTMLCanvasElement createCanvas()
+}
+
+// ***************************************************************************
+
+interface ISoundNavigator
+{
+	any getSoundPeers()
+	any getBackgroundSoundPeer()
+	bool hasBackgroundSound()
+	bool hasVoiceOver()
+	void setPreziIsMutedStream(prezi.bacon.Observable<bool> preziIsMutedStream)
+}
+
+interface IHitTest
+{
+	IViewEntity[] getViewEntitiesUnderPoint(prezi.geometry.Point worldPoint)
+	IViewEntity[] getViewEntitiesInRectangle(prezi.geometry.Rectangle worldRect)
+	IViewEntity[] getViewEntitiesInRectangleInZOrder(prezi.geometry.Rectangle worldRect)
+
+	bool enclosePoint(IViewEntity entity, prezi.geometry.Point localPoint)
+	bool hitTest(IViewEntity entity, prezi.geometry.Point localPoint)
+    string urlTest(IViewEntity entity, prezi.geometry.Point worldPoint)
+}
+
+interface IPathNavigator
+{
+	//FIXME: when this interface is moved to playback, then any can be replaced with navigation type defined there
+	void goToNext(void->void onEnd, ?any navigationMode)
+	void goToPrevious(void->void onEnd, ?any navigationMode)
+	void goToStep(int stepIdx, void->void onEnd, ?any navigationMode)
+	void goToStepAction(int stepIdx, int actionIdx, void->void onEnd, ?any navigationMode)
+	void reset()
+	prezi.bacon.Observable<prezi.engine.dom.IPathStep> getStartStepStream()
+	prezi.bacon.Observable<prezi.engine.dom.IPathStep> getEndStepStream()
+	void start(prezi.bacon.Observable<bool> stepPlayedStream, int startFromStep, int startFromAction)
+	prezi.bacon.Observable<bool> getPlayStream()
+	int getCurrentStepIndex()
+	int getStepCount()
+	prezi.engine.dom.IPathStep getStepForIndex(int index)
+
+	bool hasNext()
+	bool hasPrevious()
+}
+
+struct MouseInfo
+{
+	float stageX
+    float stageY
+
+    float wheelDeltaY
+
+    bool altKey
+    bool ctrlKey
+    bool shiftKey
+
+    float scale
+    float rotation
+}
+
+const DebugFlag {
+    int RENDER_ZOOMED_OUT_TO_SHOW_SURROUNDINGS = 1
+    int USE_PARTITION_RENDERER = 2
+    int DRAW_PARTITION_BORDERS = 3
+    int RENDER_PARTITIONS_ON_DEMAND = 4
+    int SHOW_OBJECT_IDS = 5
+    int MOON_DEBUG = 6
+    int QUADTREE_BOUNDS = 7
+}
+
+enum GroupType
+{
+	NotGroup
+	AutoGroup
+	PersistentGroup
+	PersistentGroupMember
+	PersistentGroupClickableMember
+}
+
+interface Worker
+{
+	string getName()
+	prezi.genchi.IPromise<any> init(prezi.genchi.ITask task)
+}
+
+string getIdForZIndex(prezi.engine.dom.IZIndex index)
+bool toggleDebugFlag(int flag)
+
+// ***************************************************************************
+
+// Scene / Stage / Camera
+// **********************
+
+interface Refreshable
+{
+	void markViewChanged()
+}
+
+interface SceneRender
+{
+	void forceDraw()
+	void startDrawing()
+	void finishDrawing()
+	void drawEntity(IViewEntity entity, bool shouldDrawInHighQuality)
+	HTMLCanvasElement createCopiedCanvas()
+	IViewEntity[] getBackgroundsInDepthOrder()
+}
+
+interface IStage extends ZoomingStage, SceneRender
+{
+}
+
+interface ReadonlyStage extends Refreshable
+{
+	string getEntityIdInFocus()
+	string[] getEntityIds() //to be moved to IScene
+	Camera getCamera()
+	bool isMoonInsideCamera(?float maximumScale)
+	prezi.geometry.Rectangle getStageArea()
+	prezi.geometry.Rectangle getMoonTransformedBounds()
+	IScene getScene()
+}
+
+interface ZoomingStage extends ReadonlyStage
+{
+	void flyToMoon(void->void onEnd)
+	void focusToMoon()
+	void flyToId(string entityId, void->void onEnd)
+	void flyToIdFreeNavigation(string entityId, void->void onEnd)
+	void fadeInPeerById(string entityId, void->void onEnd)
+	void focusToId(string entityId)
+	void inverseFlight(string entityId, float factor)
+	void zoom(float factor, ?void->void onEnd)
+	void zoomIn(?void->void onEnd)
+	void zoomOut(void->void onEnd)
+	void rotateCW(?void->void onEnd)
+	void rotateACW(?void->void onEnd)
+	void setScene(UpdateableScene scene)
+	Camera getStageCamera()
+	IMutableScene getMutableScene()
+	IHitTest getHitTest()
+	void setBottomPadding(int padding)
+	bool isInAnimation()
+	bool isEntityInCamera(IViewEntity entity)
+	bool isEntityContainedInCamera(IViewEntity entity, ?float maximumScale)
+
+	ImageData getImageData(float sx, float sy)
+	string getAspectRatio()
+
+	/** Stream that updates each time the scene content changed (=rerendered) or the scene itself is swapped via setScene */
+	prezi.bacon.Observable<IScene> getSceneUpdateStream()
+}
+
+interface Camera
+{
+	prezi.bacon.Observable<prezi.geometry.Transform2d> getTransformStream()
+	bool isInTransition()
+	bool isInAcceleratedTransition()
+	void accelerateCurrentTransition(float factor)
+	void cancelZooming()
+	void cancelPanning()
+	prezi.geometry.Point screenPointToWorld(prezi.geometry.Point screenPoint)
+	void startPanning(prezi.geometry.Point startPosition)
+	void stopPanning()
+	void zoomInAroundPoint(prezi.geometry.Point zoomingCenter)
+	void zoomOutAroundPoint(prezi.geometry.Point zoomingCenter)
+	void setPanningTargetPosition(prezi.geometry.Point panningTargetPosition)
+	bool isCameraOnPath()
+	void setCameraOnPath(bool cameraOnPath)
+	prezi.geometry.Rectangle screenAreaToWorld(prezi.geometry.Rectangle screenArea)
+	prezi.geometry.Rectangle stageAreaInWorld()
+	prezi.geometry.Transform2d getTransform()
+	prezi.geometry.Rectangle getStageArea()
+	int getVersion()
+	bool isCameraSettledDown()
+	prezi.bacon.Observable<bool> getFlyingStream()
+}
+
+// ***************************************************************************
+
+// Measurements
+// ************
+
+interface SpeedMeter
+{
+	// Set the experiment parameter in following speed logs (only when loggin all frames)
+	void setExperiment(string name)
+	bool getLogAllFrames()
+	void setLogAllFrames(bool logAllFrames)
+    void incrementBackwardNavigations()
+    void incrementForwardNavigations()
+    void incrementFadeAnimations()
+    void incrementFreeNavigations()
+    void incrementPannings()
+    void incrementZoomings()
+    void stopScheduledTest()
+    void startScheduledTest()
+    void stop()
+    void start()
+}
+
+interface SpeedMeasurement
+{
+	void setAutoplaySpeedTest(?string->string->void onReport)
+	void stopAutoplaySpeedTest()
+}
+
+// ***************************************************************************
+
+
+// Entity Component System
+// ***********************
+
+interface Component
+{
+	void dispose()
+	int getVersion()
+	void setVersion(int v)
+	bool isInherited()
+}
+
+interface IScene
+{
+	IEntityList getEntityList()
+	string getName()
+	string getIdForZIndex(prezi.engine.dom.IZIndex idx)
+	void requestUpdate(string entityId, IMutableViewEntity->void updateDelegate)
+	void requestBatchUpdate(IMutableScene->void updateDelegate, ?void->void onEnd)
+	void requestCommit(?void->void onEnd)
+}
+
+interface SceneCommitter
+{
+	void commit(UpdateableScene scene)
+}
+
+
+interface IMutableScene extends IScene
+{
+	IMutableEntityList getMutableEntityList()
+}
+
+interface UpdateableScene extends IMutableScene
+{
+	void update()
+	void->void onViewChange(void->void callback)
+	UpdateableScene getParentScene()
+	void reset()
+}
+
+interface SceneBuilder
+{
+	UpdateableScene createChildScene(string name, UpdateableScene parentScene, System[] systems)
+	SystemFactory getSystemFactory(Camera camera)
+}
+
+ComponentFactory createComponentFactory()
+
+interface IEntityList
+{
+	void forEach(IViewEntity->void delegate)
+	void forEachWithComponent(int compId, IViewEntity->void delegate)
+	bool has(IViewEntity->bool cond)
+	bool all(IViewEntity->bool cond)
+	IViewEntity[] filter(IViewEntity->bool cond)
+	IViewEntity getEntityById(string id)
+	int getNumberOfEntities()
+	Component getComponent(int compId, ?bool own)
+	bool hasComponent(int compId, ?bool own)
+	IViewEntity[] getEntitiesAsArray()
+	ISessionComponent session()
+}
+
+interface IMutableEntityList extends IEntityList
+{
+	IMutableViewEntity createEntity(string id)
+	void deleteEntity(string id)
+	void forEachMutable(IMutableViewEntity->void delegate)
+	IMutableViewEntity getMutableViewEntityById(string id)
+	IMutableEntityList updateChildList(IMutableEntityList childList, IMutableScene parentScene)
+	void setEntityById(string id, IMutableViewEntity entity)
+	void setComponent(int compId, Component component)
+	void clear()
+}
+
+interface IViewEntity
+{
+	Component getComponent(int compId, ?bool own)
+	bool hasComponent(int compId, ?bool own)
+	int[] getOwnComponentIds()
+	bool isDisposed()
+	string getId()
+}
+
+interface IMutableViewEntity extends IViewEntity
+{
+	IMutableViewEntity setComponent(int compId, Component component)
+	void discardOwnComponent(int compId)
+	void dispose()
+    IMutableViewEntity createParent()
+}
+
+interface ISessionComponent extends Component
+{
+	void commit()
+	prezi.engine.dom.Prezi getPrezi()
+}
+
+interface DrawComponent extends Component
+{
+	prezi.geometry.Rectangle calculateGraphicsBounds(IViewEntity entity)
+	prezi.geometry.GeomPrimitive calculateBoundingShape(IViewEntity entity)
+	prezi.geometry.Rectangle calculateZoomBounds(IViewEntity entity)
+	int getBoundsVersion(IViewEntity entity)
+}
+
+IVisibilityComponent visibility(IViewEntity entity, ?bool own)
+
+interface IVisibilityComponent extends Component
+{
+	float getAlpha()
+	bool isVisible()
+}
+
+IMutableVisibilityComponent updateVisibility(IMutableViewEntity entity)
+IMutableViewEntity setVisibilityComp(IMutableViewEntity entity, IMutableVisibilityComponent component)
+IMutableViewEntity setVisibility(IMutableViewEntity entity, bool isVisible, ?float alpha)
+
+interface IMutableVisibilityComponent extends IVisibilityComponent
+{
+	IMutableVisibilityComponent setVisible(bool visible)
+	IMutableVisibilityComponent setAlpha(float alpha)
+}
+
+IGroupingComponent grouping(IViewEntity entity)
+
+interface IGroupingComponent extends Component
+{
+	GroupType getGroupType()
+	string getParentId()
+	string[] getChildIds()
+	IGroupingComponent withGroupType(GroupType type)
+    IGroupingComponent withParentId(string parentId)
+    IGroupingComponent withChildIds(string[] ids)
+}
+
+interface IFadingComponent extends Component
+{
+	void setIsFadingFlag(bool isFading)
+	bool getIsFadingFlag()
+}
+
+IMutableViewEntity setGrouping(IMutableViewEntity entity, GroupType groupType, ?string parentId, ?string[] childIds)
+IMutableViewEntity setGroupingComp(IMutableViewEntity entity, IGroupingComponent newComponent)
+
+interface IVideoComponent extends Component
+{
+	string getVideoType()
+}
+
+interface VideoOverlayComponent extends Component
+{
+	bool isPlaySign()
+}
+
+interface MutableVideoOverlayComponent extends VideoOverlayComponent
+{
+	void setPlaySign()
+	void unsetPlaySign()
+}
+
+interface IPossiblyPlaceholderComponent extends Component {
+	bool getIsPlaceholder()
+}
+
+IScreenGeometryComponent screen(IViewEntity entity)
+
+interface IScreenGeometryComponent extends Component {
+	prezi.geometry.Transform2d getLocalToScreen()
+	prezi.geometry.Transform2d getWorldToScreen()
+	prezi.geometry.Transform2d getScreenToLocal()
+	prezi.geometry.Rectangle getScreenAxisAlignedBounds()
+	prezi.geometry.MutableOBB getScreenBounds()
+	float getViewportSizeRatio()
+	prezi.geometry.MutableOBB getViewportInLocal()
+	prezi.geometry.Rectangle getStageArea()
+}
+
+IMutableViewEntity setScreenComp(IMutableViewEntity entity, IScreenGeometryComponent screenGeomComponent)
+IMutableViewEntity setScreen(IMutableViewEntity entity, prezi.geometry.Rectangle stageArea, prezi.geometry.Transform2d worldToScreen)
+
+ShapedTextComponent shapedText(IViewEntity entity, ?bool own)
+bool hasShapedText(IViewEntity entity, ?bool own)
+IMutableViewEntity setText(IMutableViewEntity entity, prezi.text.shaping.ShapedText text)
+
+interface ShapedTextComponent extends Component{
+	prezi.text.shaping.ShapedText getShapedText()
+}
+
+
+IMutableLocalBoundsComponent updateLocalBounds(IMutableViewEntity entity)
+ILocalBoundsComponent localBounds(IViewEntity entity)
+
+interface ILocalBoundsComponent extends Component{
+	prezi.geometry.Rectangle getGraphicsBounds()
+	prezi.geometry.GeomPrimitive getBoundingShape()
+	prezi.geometry.Rectangle getZoomBounds()
+}
+
+interface IMutableLocalBoundsComponent extends ILocalBoundsComponent {
+	void setGraphicsBounds(prezi.geometry.Rectangle value)
+    void setBoundingShape(prezi.geometry.GeomPrimitive value)
+    void setZoomBounds(prezi.geometry.Rectangle value)
+}
+
+interface IMutableScreenGeometry extends IScreenGeometryComponent {
+	void setLocalToScreen(prezi.geometry.Transform2d localToScreen)
+	void setWorldToScreen(prezi.geometry.Transform2d worldToScreen)
+	void setScreenAxisAlignedBounds(prezi.geometry.Rectangle aabb)
+	void setScreenBounds(prezi.geometry.MutableOBB screenBounds)
+	void setViewportSizeRatio(float viewportSizeratio)
+	void setViewportInLocal(prezi.geometry.MutableOBB viewportInLocal)
+	void setStageArea(prezi.geometry.Rectangle stageArea)
+}
+
+IWorldGeometryComponent world(IViewEntity entity)
+
+interface IWorldGeometryComponent extends Component {
+	prezi.geometry.Rectangle getClipMask()
+	prezi.geometry.MutableOBB getWorldBounds()
+	prezi.geometry.Rectangle getWorldAxisAlignedBounds()
+	prezi.geometry.GeomPrimitive getWorldBoundingShape()
+}
+
+IMutableWorldGeometry updateWorld(IMutableViewEntity entity)
+IMutableViewEntity setWorld(IMutableViewEntity entity, prezi.geometry.Transform2d localToWorld)
+
+interface IMutableWorldGeometry extends IWorldGeometryComponent {
+	void setClipMask(prezi.geometry.Rectangle clipMask)
+	void setWorldBounds(prezi.geometry.MutableOBB worldBounds)
+	void setWorldAxisAlignedBounds(prezi.geometry.Rectangle worldAABB)
+	void setWorldBoundingShape(prezi.geometry.GeomPrimitive worldBoundingShape)
+}
+
+ITransformComponent transform(IViewEntity entity)
+IMutableTransformComponent updateTransform(IMutableViewEntity entity)
+IMutableViewEntity setTransformComp(IMutableViewEntity entity, IMutableTransformComponent transform)
+
+DrawComponent draw(IViewEntity entity, ?bool own)
+
+interface ITransformComponent extends Component {
+	prezi.geometry.Transform2d getLocalToWorld()
+	prezi.geometry.Transform2d getWorldToLocal()
+}
+
+interface IMutableTransformComponent extends ITransformComponent {
+	void setLocalToWorld(prezi.geometry.Transform2d value)
+}
+
+interface IZOrderComponent extends Component {
+	int getZIndex()
+	int getZLayer()
+	//killme
+	void setZIndex(int idx)
+}
+
+IMutableViewEntity setFillComp(IMutableViewEntity entity, IFillComponent component)
+IMutableViewEntity setPdomComp(IMutableViewEntity entity, IPdomComponent component)
+IMutableViewEntity setPdom(IMutableViewEntity entity, prezi.engine.dom.ZObject zObject, string objectType)
+
+IMutableViewEntity setWorldComp(IMutableViewEntity entity, IMutableWorldGeometry component)
+IFillComponent fill(IViewEntity entity)
+
+interface IPdomComponent extends Component {
+	prezi.engine.dom.HasPDOMId getPdomObject()
+	string getObjectType()
+}
+
+interface IFillComponent extends Component, prezi.engine.dom.IHasFill {
+	IFillComponent withColor(prezi.geometry.Color value)
+	IFillComponent withAlpha(float value)
+	IFillComponent withGradEndAlpha(float value)
+	IFillComponent withGradEndColor(prezi.geometry.Color value)
+	IFillComponent withGradStartAlpha(float value)
+	IFillComponent withGradStartColor(prezi.geometry.Color value)
+}
+
+IMutableViewEntity setRectangularComp(IMutableViewEntity entity, IRectangularComponent rectangularComponent)
+IRectangularComponent rectangular(IViewEntity entity)
+
+prezi.engine.dom.IHasBorder border(IViewEntity entity)
+
+IMutableViewEntity setBorder(IMutableViewEntity entity, float thickness, ?prezi.geometry.Color color, ?float alpha)
+
+interface IBorderComponent extends Component, prezi.engine.dom.IHasBorder {
+	IBorderComponent withBorderThickness(float value)
+	IBorderComponent withBorderAlpha(float value)
+	IBorderComponent withBorderColor(prezi.geometry.Color value)
+}
+
+interface IRectangularComponent extends Component, prezi.engine.dom.IRectangular {
+	IRectangularComponent withWidth(float value)
+	IRectangularComponent withHeight(float value)
+}
+
+interface System
+{
+	void update(UpdateableScene scene)
+	string getName()
+	void reset()
+}
+
+interface SystemFactory
+{
+	System createBackgroundLayerSystem()
+	System createScreenGeometrySystem()
+	System createWorldGeometrySystem()
+	System createThumbnailOnlyVideoSystem()
+	System createBackgroundProjectionClipSystem()
+	System createQuadTreeSystem()
+	System createBoundCalculationSystem()
+}
+
+interface ComponentFactory
+{
+	IMutableVisibilityComponent createVisibilityComponent()
+	IFadingComponent createFadingComponent(bool isFading, int fadingId)
+	IMutableScreenGeometry createScreenGeometryComponent()
+	IMutableWorldGeometry createWorldGeometryComponent()
+	IMutableTransformComponent createTransformComponent(?prezi.geometry.Transform2d localToWorld)
+	IFillComponent createFillComponentFromSolidColor(prezi.geometry.Color color, float alpha)
+	IBorderComponent createBorderComponent(float borderThickness, prezi.geometry.Color borderColor, float borderAlpha)
+	IRectangularComponent createRectangularComponent(float width, float height)
+	IZOrderComponent createZOrderComponent(int idx, ?int layer)
+	IPdomComponent createPdomComponent(prezi.engine.dom.HasPDOMId zObject, string objectType)
+	ISessionComponent createSessionComponent(prezi.engine.dom.Session session)
+}
+
+// Component access
+// ****************
+IZOrderComponent zOrder(IViewEntity entity)
+IMutableViewEntity setZOrderComp(IMutableViewEntity entity, IZOrderComponent comp)
+bool hasZOrder(IViewEntity entity)
+IViewEntity[] sortInZOrder(IViewEntity[] entities)
+
+IPossiblyPlaceholderComponent possiblyPlaceholder(IViewEntity entity)
+
+IVideoComponent video(IViewEntity entity, ?bool own)
+VideoOverlayComponent videoOverlay(IViewEntity entity, ?bool own)
+MutableVideoOverlayComponent updateVideoOverlay(IMutableViewEntity entity, ?bool own)
+
+prezi.geometry.Rectangle axisAlignedScreenBounds(IViewEntity entity)
+IMutableViewEntity setFadingComp(IMutableViewEntity entity, IFadingComponent component)
+IFadingComponent fading(IMutableViewEntity entity)
+IPdomComponent pdom(IViewEntity entity)
+
+// Test with entities
+
+IMutableEntityList createEntityListForTest()
+ComponentFactory createComponentFactoryForTest()
+
+IMutableViewEntity setupTestDraw(IMutableViewEntity entity, prezi.geometry.Rectangle localBounds)
+
+SceneBuilder createSceneBuilderForTest()
+
+interface RenderContext
+{
+	void pushMatrix(prezi.geometry.IMatrix2d m)
+	prezi.geometry.IMatrix2d  popMatrix()
+	prezi.geometry.IMatrix2d[]  getStack()
+
+	void pushInverse()
+	void destructiveClip(prezi.geometry.Rectangle bounds)
+	void flip()
+	void setImageMask(prezi.geometry.Rectangle mask)
+
+	prezi.geometry.Rectangle getImageMask()
+
+	void drawImage4(HTMLCanvasElement image, float x, float y, float w, float h)
+	void drawImage8(HTMLCanvasElement image, float sx, float sy, float sw, float sh, float dx, float dy, float dw, float dh)
+	void drawImageScaled(HTMLCanvasElement image, prezi.geometry.Rectangle destRect)
+	bool shouldDrawDebug()
+	CanvasRenderingContext2D getGraphics()
+}
+
+////
+// Rendering
+////
+
+IMutableViewEntity setRenderer(IMutableViewEntity entity, EntityRenderer renderer)
+
+interface EntityRenderer {
+	void draw(IViewEntity entity, RenderContext ctx)
+	void drawForHitTest(IViewEntity entity, RenderContext ctx)
+	int getBoundsVersion(IViewEntity entity)
+	prezi.geometry.Rectangle calculateBounds(IViewEntity entity)
+}
+
+interface Path2D {
+	void arc(float x, float y, float radius, float startAngle, float endAngle, bool anticlockwise)
+	void arcTo(float x1 , float y1 , float x2 , float y2 , float radius)
+	void bezierCurveTo(float cp1x , float cp1y, float cp2x , float cp2y ,float x ,float y)
+	void closePath()
+	void lineTo(float x , float y)
+	void moveTo(float x , float y)
+	void quadraticCurveTo(float cpx , float cpy, float x , float y)
+	void rect(float x, float y, float w, float h)
+}
+
+interface Path2DGraphics
+{
+	Path2D getPath2D()
+	void fill(CanvasRenderingContext2D graphics)
+	void stroke(CanvasRenderingContext2D graphics)
+}
+
+interface ShapeDrawer {
+	void drawBorderWithHairline(prezi.engine.dom.IHasBorder obj, CanvasRenderingContext2D graphics, float localToScreenScale, ?Path2DGraphics path2D)
+	void drawBorder(prezi.engine.dom.IHasBorder obj, CanvasRenderingContext2D graphics, ?Path2DGraphics path2D)
+	CanvasGradient createVerticalLinearGradient(CanvasRenderingContext2D graphics, float height)
+	void setFillStyle(CanvasRenderingContext2D graphics, prezi.engine.dom.IHasFill fill, CanvasGradient gradient, ?bool inverseAlpha)
+}
+
+ShapeDrawer createShapeDrawer()
+
+interface StageQuery {
+	prezi.geometry.Point screenPointToWorld(prezi.geometry.Point screenPoint)
+	string getEntityIdUnderPoint(prezi.geometry.Point worldPoint, ?string entityIdInFocus)
+	string[] getEntityIdsUnderPoint(prezi.geometry.Point worldPoint)
+	prezi.cet.IViewEntity[] getEntitiesUnderPoint(prezi.geometry.Point worldPoint)
+	prezi.cet.IViewEntity[] getDraggableEntitiesUnderPoint(prezi.geometry.Point worldPoint)
+	string getParentEntityIdOfScreen(prezi.cet.Camera camera, prezi.geometry.Rectangle stageArea)
+	IViewEntity[] getContainedEntities(IViewEntity parentEntity, ?IViewEntity->IViewEntity->bool containsFunction)
+	IViewEntity[] getEntitiesInArea(prezi.geometry.MutableOBB worldArea)
+}
