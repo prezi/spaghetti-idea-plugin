@@ -15,6 +15,7 @@
   psiImplUtilClass="com.prezi.intellij.spaghetti.psi.impl.SpaghettiModulePsiImplUtil"
 
   tokens=[
+  	OPTIONAL = '?'
     PL='('
     PR=')'
   	CL = '{'
@@ -26,6 +27,10 @@
 	interface = 'interface'
   	void = 'void'
   	any = 'any'
+  	bool = 'bool'
+  	int = 'int'
+  	float = 'float'
+  	string = 'string'
   	true = 'true'
   	false = 'false'
     intValue='regexp:\d+'
@@ -54,10 +59,13 @@ externTypeDefinition ::= 'extern' 'interface' qualifiedName
 
 moduleMethodDefinition ::= methodDefinition
 
-methodDefinition ::= typeParameters? returnType ID '(' /* TODO methodParameters? */ ')'
-
+methodDefinition ::= typeParameters? returnType ID '(' methodParameters? ')'
 
 methodParameters ::= methodParameter ( ',' methodParameter )*
+
+methodParameter	::= OPTIONAL? typeNamePair
+
+typeNamePair ::= complexType ID
 
 returnType ::= void | complexType
 
@@ -75,7 +83,7 @@ typeChainElement ::= type | '(' typeChain ')'
 
 objectType ::= qualifiedName typeArguments?
 
-primitiveType ::=  any | boolType // TODO | int | float | string
+primitiveType ::=  any | bool | int | float | string
 
 boolType ::= true | false
 
@@ -95,4 +103,4 @@ annotationParameters ::= annotationValue | annotationParameter ( ',' annotationP
 
 annotationParameter ::= id '=' annotationValue
 
-annotationValue	::= null | boolType | intValue | floatValue | string
+annotationValue	::= null | boolType | intValue | floatValue | stringValue
