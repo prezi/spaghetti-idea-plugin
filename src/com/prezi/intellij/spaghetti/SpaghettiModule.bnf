@@ -57,7 +57,7 @@ moduleElement ::= importDeclaration | externTypeDefinition | typeDefinition | mo
 
 importDeclaration ::= import qualifiedName (AS ID)?
 
-externTypeDefinition ::= 'extern' 'interface' qualifiedName
+externTypeDefinition ::= extern interface qualifiedName
 
 typeDefinition ::= interfaceDefinition // TODO | structDefinition | constDefinition	| enumDefinition
 
