@@ -27,7 +27,6 @@ public class SpaghettiModuleParserDefinition implements ParserDefinition{
     public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
     public static final TokenSet COMMENTS = TokenSet.create(SpaghettiModuleTypes.ANY); //BULSHIT!
 
-//    public static final IFileElementType FILE = new IFileElementType(Language.<SimpleLanguage>findInstance(SimpleLanguage.class));
     public static final IFileElementType FILE = new IFileElementType(Language.<SpaghettiModuleLanguage>findInstance(SpaghettiModuleLanguage.class));
 
     @NotNull
