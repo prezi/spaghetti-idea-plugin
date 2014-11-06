@@ -1,4 +1,4 @@
-package com.prezi.spaghetti;
+package com.prezi.intellij.spaghetti;
 
 import com.intellij.lang.Language;
 
