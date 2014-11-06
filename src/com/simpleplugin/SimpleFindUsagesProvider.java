@@ -34,7 +34,7 @@ public class SimpleFindUsagesProvider implements FindUsagesProvider {
     @Nullable
     @Override
     public String getHelpId(@NotNull PsiElement psiElement) {
-        return HelpID.FIND_OTHER_USAGES;
+        return HelpID.FIND_THROW_USAGES; // incompatibility caused by community vs ultimate
     }
 
     @NotNull
