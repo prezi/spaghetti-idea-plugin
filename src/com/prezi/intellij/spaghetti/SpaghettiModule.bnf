@@ -16,8 +16,7 @@
   psiImplUtilClass="com.prezi.intellij.spaghetti.psi.impl.SpaghettiModulePsiImplUtil"
 
   tokens=[
-  	LINE_COMMENT = 'regexp://.*'
-  	BLOCK_COMMENT = 'regexp:/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*/'
+  	COMMENT = 'regexp:(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|(//.*)'
   	OPTIONAL = '?'
     PL='('
     PR=')'
