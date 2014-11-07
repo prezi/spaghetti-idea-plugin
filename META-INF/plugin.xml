@@ -42,5 +42,9 @@
       <lang.parserDefinition language="SpaghettiModule" implementationClass="com.prezi.intellij.spaghetti.SpaghettiModuleParserDefinition"/>
       <lang.syntaxHighlighterFactory key="SpaghettiModule" implementationClass="com.prezi.intellij.spaghetti.SpaghettiModuleSyntaxHighlighterFactory"/>
       <lang.foldingBuilder language="SpaghettiModule" implementationClass="com.prezi.intellij.spaghetti.SpaghettiModuleFoldingBuilder"/>
+      <psi.referenceContributor implementation="com.prezi.intellij.spaghetti.psi.SpaghettiModuleReferenceContributor"/>
+      <completion.contributor language="SpaghettiModule" implementationClass="com.prezi.intellij.spaghetti.SpaghettiModuleCompletionContributor"/>
+      <lang.refactoringSupport language="SpaghettiModule" implementationClass="com.prezi.intellij.spaghetti.SpaghettiModuleRefactoringSupportProvider"/>
+
   </extensions>
 </idea-plugin>
