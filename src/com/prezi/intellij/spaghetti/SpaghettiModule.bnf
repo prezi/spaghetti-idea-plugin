@@ -15,81 +15,52 @@
 
   psiImplUtilClass="com.prezi.intellij.spaghetti.psi.impl.SpaghettiModulePsiImplUtil"
 
-  tokens=[
-  	COMMENT = 'regexp:(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|(//.*)'
-  	OPTIONAL = '?'
-    PL='('
-    PR=')'
-  	CL = '{'
-  	CR = '}'
-  	AS = 'as'
-  	const = 'const'
-	module = 'module'
-	import = 'import'
-	extern = 'extern'
-	extends = 'extends'
-	interface = 'interface'
-	struct = 'struct'
-	enum = 'enum'
-  	void = 'void'
-  	any = 'any'
-  	bool = 'bool'
-  	int = 'int'
-  	float = 'float'
-  	string = 'string'
-  	true = 'true'
-  	false = 'false'
-    intValue='regexp:\d+'
-  	floatValue='regexp:\d+(\.\d*)'
-  	ID = 'regexp:\w*'
-    stringValue="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
+  tokens = [
+    ID = "regexp:\w*"
+    COMMENT = 'regexp:(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|(//.*)'
   ]
 }
 
-SpaghettiModuleDefinition ::=
-//	comment?
-	annotations?
-	'module' moduleSpec
-	moduleElement*
+SpaghettiModuleDefinition ::= moduleSpec moduleElement*
 
-moduleSpec ::= qualifiedName (AS ID)?
+moduleSpec ::= annotations? 'module' aliasedName
 
 moduleElement ::= importDeclaration | externTypeDefinition | typeDefinition | moduleMethodDefinition
 
-importDeclaration ::= import qualifiedName (AS ID)?
+importDeclaration ::= import aliasedName
 
 externTypeDefinition ::= annotations? extern interface qualifiedName
 
 typeDefinition ::= interfaceDefinition | structDefinition | constDefinition | enumDefinition
 
 interfaceDefinition ::=
- 	annotations?
-	interface ID typeParameters?
-	( extends superInterfaceDefinition ( ',' superInterfaceDefinition )* )?
-	'{' interfaceMethodDefinition* '}' {mixin="com.prezi.intellij.spaghetti.psi.impl.SpaghettiModuleNamedElementImpl"
+    annotations?
+    interface ID typeParameters?
+    ( extends superInterfaceDefinition ( ',' superInterfaceDefinition )* )?
+    '{' interfaceMethodDefinition* '}' {mixin="com.prezi.intellij.spaghetti.psi.impl.SpaghettiModuleNamedElementImpl"
        implements="com.prezi.intellij.spaghetti.psi.SpaghettiModuleNamedElement" methods=[getName getNameIdentifier setName]}
 
 
 structDefinition ::=
-	annotations?
-	struct ID typeParameters?
-	'{' propertyDefinition* '}'
+    annotations?
+    struct ID typeParameters?
+    '{' propertyDefinition* '}'
 
 constDefinition ::= annotations? const ID '{' constEntry* '}'
 
 constEntry ::= annotations? constEntryDecl
 
 constEntryDecl ::=
-	bool? ID '=' boolValue
-	| int? ID '=' intValue
-	| float? ID '=' floatValue
-	| string? ID '=' stringValue
+    bool? ID '=' boolValue
+    | int? ID '=' intValue
+    | float? ID '=' floatValue
+    | string? ID '=' stringValue
 
-enumDefinition ::= annotations? 'enum' ID '{'	enumValue* '}'
+enumDefinition ::= annotations? enum ID '{' enumValue* '}'
 
 enumValue ::= annotations? ID
 
-propertyDefinition ::= annotations?	OPTIONAL? typeNamePair
+propertyDefinition ::= annotations? OPTIONAL? typeNamePair
 
 superInterfaceDefinition ::= qualifiedName typeArguments?
 
@@ -101,7 +72,7 @@ methodDefinition ::= annotations? typeParameters? returnType ID '(' methodParame
 
 methodParameters ::= methodParameter ( ',' methodParameter )*
 
-methodParameter	::= OPTIONAL? typeNamePair
+methodParameter ::= OPTIONAL? typeNamePair
 
 typeNamePair ::= complexType ID
 
@@ -125,9 +96,9 @@ objectType ::= qualifiedName typeArguments?
 
 primitiveType ::=  any | bool | int | float | string
 
-boolValue ::= true | false
-
 ArrayQualifier ::= '[' ']'
+
+aliasedName ::= qualifiedName ('as' ID)?
 
 qualifiedName ::= ID ('.' ID)*
 
@@ -137,10 +108,18 @@ typeArguments ::= '<' returnType ( ',' returnType )* '>'
 
 annotations ::= annotation+
 
-annotation ::= '@' ID (PL annotationParameters? PR)?
+annotation ::= '@' ID ('(' annotationParameters? ')')?
 
 annotationParameters ::= annotationValue | annotationParameter ( ',' annotationParameter )*
 
 annotationParameter ::= ID '=' annotationValue
 
-annotationValue	::= null | boolValue | intValue | floatValue | stringValue
+annotationValue ::= null | boolValue | intValue | floatValue | stringValue
+
+private boolValue ::= true | false
+private intValue ::= SIGN? 'regexp:0|[1-9][0-9]*'
+private floatValue ::= SIGN? 'regexp:(0|[1-9][0-9]*)?\.[0-9]+'
+private stringValue ::= "regexp:(\"([^\"\\]|\\.)*\")"
+
+private OPTIONAL ::= '?'
+SIGN ::= '+' | '-'
