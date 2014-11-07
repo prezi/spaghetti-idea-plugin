@@ -23,6 +23,12 @@ public class SpaghettiModuleMethodParameterImpl extends ASTWrapperPsiElement imp
   }
 
   @Override
+  @Nullable
+  public SpaghettiModuleOptional getOptional() {
+    return findChildByClass(SpaghettiModuleOptional.class);
+  }
+
+  @Override
   @NotNull
   public SpaghettiModuleTypeNamePair getTypeNamePair() {
     return findNotNullChildByClass(SpaghettiModuleTypeNamePair.class);

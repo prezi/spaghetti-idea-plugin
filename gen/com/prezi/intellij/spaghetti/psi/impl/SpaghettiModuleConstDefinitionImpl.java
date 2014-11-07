@@ -40,10 +40,4 @@ public class SpaghettiModuleConstDefinitionImpl extends ASTWrapperPsiElement imp
     return findNotNullChildByType(ID);
   }
 
-  @Override
-  @NotNull
-  public PsiElement getConst() {
-    return findNotNullChildByType(CONST);
-  }
-
 }

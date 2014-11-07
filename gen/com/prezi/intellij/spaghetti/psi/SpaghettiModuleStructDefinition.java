@@ -19,7 +19,4 @@ public interface SpaghettiModuleStructDefinition extends PsiElement {
   @NotNull
   PsiElement getId();
 
-  @NotNull
-  PsiElement getStruct();
-
 }

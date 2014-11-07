@@ -46,10 +46,4 @@ public class SpaghettiModuleStructDefinitionImpl extends ASTWrapperPsiElement im
     return findNotNullChildByType(ID);
   }
 
-  @Override
-  @NotNull
-  public PsiElement getStruct() {
-    return findNotNullChildByType(STRUCT);
-  }
-
 }

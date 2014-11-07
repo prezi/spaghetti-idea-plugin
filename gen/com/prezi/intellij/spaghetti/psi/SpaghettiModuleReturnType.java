@@ -10,7 +10,4 @@ public interface SpaghettiModuleReturnType extends PsiElement {
   @Nullable
   SpaghettiModuleComplexType getComplexType();
 
-  @Nullable
-  PsiElement getVoid();
-
 }

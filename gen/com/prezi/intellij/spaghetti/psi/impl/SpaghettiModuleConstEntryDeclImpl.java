@@ -29,51 +29,27 @@ public class SpaghettiModuleConstEntryDeclImpl extends ASTWrapperPsiElement impl
   }
 
   @Override
+  @Nullable
+  public SpaghettiModuleFloatValue getFloatValue() {
+    return findChildByClass(SpaghettiModuleFloatValue.class);
+  }
+
+  @Override
+  @Nullable
+  public SpaghettiModuleIntValue getIntValue() {
+    return findChildByClass(SpaghettiModuleIntValue.class);
+  }
+
+  @Override
+  @Nullable
+  public SpaghettiModuleStringValue getStringValue() {
+    return findChildByClass(SpaghettiModuleStringValue.class);
+  }
+
+  @Override
   @NotNull
   public PsiElement getId() {
     return findNotNullChildByType(ID);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getBool() {
-    return findChildByType(BOOL);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getFloat() {
-    return findChildByType(FLOAT);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getFloatValue() {
-    return findChildByType(FLOATVALUE);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getInt() {
-    return findChildByType(INT);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getIntValue() {
-    return findChildByType(INTVALUE);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getString() {
-    return findChildByType(STRING);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getStringValue() {
-    return findChildByType(STRINGVALUE);
   }
 
 }

@@ -10,28 +10,16 @@ public interface SpaghettiModuleConstEntryDecl extends PsiElement {
   @Nullable
   SpaghettiModuleBoolValue getBoolValue();
 
+  @Nullable
+  SpaghettiModuleFloatValue getFloatValue();
+
+  @Nullable
+  SpaghettiModuleIntValue getIntValue();
+
+  @Nullable
+  SpaghettiModuleStringValue getStringValue();
+
   @NotNull
   PsiElement getId();
-
-  @Nullable
-  PsiElement getBool();
-
-  @Nullable
-  PsiElement getFloat();
-
-  @Nullable
-  PsiElement getFloatValue();
-
-  @Nullable
-  PsiElement getInt();
-
-  @Nullable
-  PsiElement getIntValue();
-
-  @Nullable
-  PsiElement getString();
-
-  @Nullable
-  PsiElement getStringValue();
 
 }

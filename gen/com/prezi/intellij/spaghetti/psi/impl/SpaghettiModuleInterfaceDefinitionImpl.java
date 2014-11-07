@@ -51,18 +51,6 @@ public class SpaghettiModuleInterfaceDefinitionImpl extends SpaghettiModuleNamed
     return findNotNullChildByType(ID);
   }
 
-  @Override
-  @Nullable
-  public PsiElement getExtends() {
-    return findChildByType(EXTENDS);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getInterface() {
-    return findNotNullChildByType(INTERFACE);
-  }
-
   public String getName() {
     return SpaghettiModulePsiImplUtil.getName(this);
   }

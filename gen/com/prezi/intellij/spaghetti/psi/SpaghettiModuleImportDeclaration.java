@@ -8,12 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface SpaghettiModuleImportDeclaration extends PsiElement {
 
   @NotNull
-  SpaghettiModuleQualifiedName getQualifiedName();
-
-  @Nullable
-  PsiElement getId();
-
-  @NotNull
-  PsiElement getImport();
+  SpaghettiModuleAliasedName getAliasedName();
 
 }

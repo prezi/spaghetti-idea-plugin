@@ -16,7 +16,4 @@ public interface SpaghettiModuleConstDefinition extends PsiElement {
   @NotNull
   PsiElement getId();
 
-  @NotNull
-  PsiElement getConst();
-
 }

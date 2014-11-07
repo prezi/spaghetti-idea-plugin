@@ -34,16 +34,4 @@ public class SpaghettiModuleExternTypeDefinitionImpl extends ASTWrapperPsiElemen
     return findNotNullChildByClass(SpaghettiModuleQualifiedName.class);
   }
 
-  @Override
-  @NotNull
-  public PsiElement getExtern() {
-    return findNotNullChildByType(EXTERN);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getInterface() {
-    return findNotNullChildByType(INTERFACE);
-  }
-
 }

@@ -11,6 +11,18 @@ public class SpaghettiModuleVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitOptional(@NotNull SpaghettiModuleOptional o) {
+    visitPsiElement(o);
+  }
+
+  public void visitSign(@NotNull SpaghettiModuleSign o) {
+    visitPsiElement(o);
+  }
+
+  public void visitAliasedName(@NotNull SpaghettiModuleAliasedName o) {
+    visitPsiElement(o);
+  }
+
   public void visitAnnotation(@NotNull SpaghettiModuleAnnotation o) {
     visitPsiElement(o);
   }
@@ -63,7 +75,15 @@ public class SpaghettiModuleVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitFloatValue(@NotNull SpaghettiModuleFloatValue o) {
+    visitPsiElement(o);
+  }
+
   public void visitImportDeclaration(@NotNull SpaghettiModuleImportDeclaration o) {
+    visitPsiElement(o);
+  }
+
+  public void visitIntValue(@NotNull SpaghettiModuleIntValue o) {
     visitPsiElement(o);
   }
 
@@ -116,6 +136,10 @@ public class SpaghettiModuleVisitor extends PsiElementVisitor {
   }
 
   public void visitReturnType(@NotNull SpaghettiModuleReturnType o) {
+    visitPsiElement(o);
+  }
+
+  public void visitStringValue(@NotNull SpaghettiModuleStringValue o) {
     visitPsiElement(o);
   }
 

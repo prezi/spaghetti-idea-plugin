@@ -13,10 +13,4 @@ public interface SpaghettiModuleExternTypeDefinition extends PsiElement {
   @NotNull
   SpaghettiModuleQualifiedName getQualifiedName();
 
-  @NotNull
-  PsiElement getExtern();
-
-  @NotNull
-  PsiElement getInterface();
-
 }

@@ -7,6 +7,9 @@ import com.intellij.psi.PsiElement;
 
 public interface SpaghettiModuleMethodParameter extends PsiElement {
 
+  @Nullable
+  SpaghettiModuleOptional getOptional();
+
   @NotNull
   SpaghettiModuleTypeNamePair getTypeNamePair();
 

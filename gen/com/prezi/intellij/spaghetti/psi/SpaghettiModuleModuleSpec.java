@@ -8,9 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface SpaghettiModuleModuleSpec extends PsiElement {
 
   @NotNull
-  SpaghettiModuleQualifiedName getQualifiedName();
+  SpaghettiModuleAliasedName getAliasedName();
 
   @Nullable
-  PsiElement getId();
+  SpaghettiModuleAnnotations getAnnotations();
 
 }

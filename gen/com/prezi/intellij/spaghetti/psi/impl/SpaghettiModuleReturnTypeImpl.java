@@ -28,10 +28,4 @@ public class SpaghettiModuleReturnTypeImpl extends ASTWrapperPsiElement implemen
     return findChildByClass(SpaghettiModuleComplexType.class);
   }
 
-  @Override
-  @Nullable
-  public PsiElement getVoid() {
-    return findChildByType(VOID);
-  }
-
 }

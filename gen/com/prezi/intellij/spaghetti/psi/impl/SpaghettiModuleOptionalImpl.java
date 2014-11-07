@@ -11,14 +11,14 @@ import static com.prezi.intellij.spaghetti.psi.SpaghettiModuleTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.prezi.intellij.spaghetti.psi.*;
 
-public class SpaghettiModulePrimitiveTypeImpl extends ASTWrapperPsiElement implements SpaghettiModulePrimitiveType {
+public class SpaghettiModuleOptionalImpl extends ASTWrapperPsiElement implements SpaghettiModuleOptional {
 
-  public SpaghettiModulePrimitiveTypeImpl(ASTNode node) {
+  public SpaghettiModuleOptionalImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof SpaghettiModuleVisitor) ((SpaghettiModuleVisitor)visitor).visitPrimitiveType(this);
+    if (visitor instanceof SpaghettiModuleVisitor) ((SpaghettiModuleVisitor)visitor).visitOptional(this);
     else super.accept(visitor);
   }
 

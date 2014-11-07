@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface SpaghettiModulePropertyDefinition extends PsiElement {
 
   @Nullable
+  SpaghettiModuleOptional getOptional();
+
+  @Nullable
   SpaghettiModuleAnnotations getAnnotations();
 
   @NotNull

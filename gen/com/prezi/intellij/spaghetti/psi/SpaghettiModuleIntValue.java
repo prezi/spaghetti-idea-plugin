@@ -5,6 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface SpaghettiModuleBoolValue extends PsiElement {
+public interface SpaghettiModuleIntValue extends PsiElement {
+
+  @Nullable
+  SpaghettiModuleSign getSign();
 
 }

@@ -10,7 +10,4 @@ public interface SpaghettiModuleTypeChainReturnType extends PsiElement {
   @Nullable
   SpaghettiModuleTypeChainElement getTypeChainElement();
 
-  @Nullable
-  PsiElement getVoid();
-
 }

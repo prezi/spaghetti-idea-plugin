@@ -24,14 +24,14 @@ public class SpaghettiModuleModuleSpecImpl extends ASTWrapperPsiElement implemen
 
   @Override
   @NotNull
-  public SpaghettiModuleQualifiedName getQualifiedName() {
-    return findNotNullChildByClass(SpaghettiModuleQualifiedName.class);
+  public SpaghettiModuleAliasedName getAliasedName() {
+    return findNotNullChildByClass(SpaghettiModuleAliasedName.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getId() {
-    return findChildByType(ID);
+  public SpaghettiModuleAnnotations getAnnotations() {
+    return findChildByClass(SpaghettiModuleAnnotations.class);
   }
 
 }

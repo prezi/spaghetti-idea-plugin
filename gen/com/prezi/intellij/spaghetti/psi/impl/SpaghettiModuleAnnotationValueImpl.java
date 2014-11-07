@@ -30,20 +30,20 @@ public class SpaghettiModuleAnnotationValueImpl extends ASTWrapperPsiElement imp
 
   @Override
   @Nullable
-  public PsiElement getFloatValue() {
-    return findChildByType(FLOATVALUE);
+  public SpaghettiModuleFloatValue getFloatValue() {
+    return findChildByClass(SpaghettiModuleFloatValue.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getIntValue() {
-    return findChildByType(INTVALUE);
+  public SpaghettiModuleIntValue getIntValue() {
+    return findChildByClass(SpaghettiModuleIntValue.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getStringValue() {
-    return findChildByType(STRINGVALUE);
+  public SpaghettiModuleStringValue getStringValue() {
+    return findChildByClass(SpaghettiModuleStringValue.class);
   }
 
 }

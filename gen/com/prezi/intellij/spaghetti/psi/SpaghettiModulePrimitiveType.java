@@ -7,19 +7,4 @@ import com.intellij.psi.PsiElement;
 
 public interface SpaghettiModulePrimitiveType extends PsiElement {
 
-  @Nullable
-  PsiElement getAny();
-
-  @Nullable
-  PsiElement getBool();
-
-  @Nullable
-  PsiElement getFloat();
-
-  @Nullable
-  PsiElement getInt();
-
-  @Nullable
-  PsiElement getString();
-
 }

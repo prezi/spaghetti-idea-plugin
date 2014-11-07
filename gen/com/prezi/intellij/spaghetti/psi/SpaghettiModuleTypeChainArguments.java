@@ -10,7 +10,4 @@ public interface SpaghettiModuleTypeChainArguments extends PsiElement {
   @NotNull
   List<SpaghettiModuleTypeChainElement> getTypeChainElementList();
 
-  @Nullable
-  PsiElement getVoid();
-
 }

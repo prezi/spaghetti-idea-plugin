@@ -24,6 +24,12 @@ public class SpaghettiModulePropertyDefinitionImpl extends ASTWrapperPsiElement 
 
   @Override
   @Nullable
+  public SpaghettiModuleOptional getOptional() {
+    return findChildByClass(SpaghettiModuleOptional.class);
+  }
+
+  @Override
+  @Nullable
   public SpaghettiModuleAnnotations getAnnotations() {
     return findChildByClass(SpaghettiModuleAnnotations.class);
   }

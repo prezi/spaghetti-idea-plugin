@@ -40,10 +40,4 @@ public class SpaghettiModuleEnumDefinitionImpl extends ASTWrapperPsiElement impl
     return findNotNullChildByType(ID);
   }
 
-  @Override
-  @NotNull
-  public PsiElement getEnum() {
-    return findNotNullChildByType(ENUM);
-  }
-
 }

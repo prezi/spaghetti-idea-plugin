@@ -5,7 +5,7 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
 import com.intellij.openapi.diagnostic.Logger;
 import static com.prezi.intellij.spaghetti.psi.SpaghettiModuleTypes.*;
-import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+import static com.prezi.intellij.spaghetti.parser.SpaghettiModuleParserUtil.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.tree.TokenSet;
@@ -22,6 +22,15 @@ public class SpaghettiModuleParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, 0, _COLLAPSE_, null);
     if (root_ == ARRAY_QUALIFIER) {
       result_ = ArrayQualifier(builder_, 0);
+    }
+    else if (root_ == OPTIONAL) {
+      result_ = OPTIONAL(builder_, 0);
+    }
+    else if (root_ == SIGN) {
+      result_ = SIGN(builder_, 0);
+    }
+    else if (root_ == ALIASED_NAME) {
+      result_ = aliasedName(builder_, 0);
     }
     else if (root_ == ANNOTATION) {
       result_ = annotation(builder_, 0);
@@ -62,8 +71,14 @@ public class SpaghettiModuleParser implements PsiParser {
     else if (root_ == EXTERN_TYPE_DEFINITION) {
       result_ = externTypeDefinition(builder_, 0);
     }
+    else if (root_ == FLOAT_VALUE) {
+      result_ = floatValue(builder_, 0);
+    }
     else if (root_ == IMPORT_DECLARATION) {
       result_ = importDeclaration(builder_, 0);
+    }
+    else if (root_ == INT_VALUE) {
+      result_ = intValue(builder_, 0);
     }
     else if (root_ == INTERFACE_DEFINITION) {
       result_ = interfaceDefinition(builder_, 0);
@@ -103,6 +118,9 @@ public class SpaghettiModuleParser implements PsiParser {
     }
     else if (root_ == RETURN_TYPE) {
       result_ = returnType(builder_, 0);
+    }
+    else if (root_ == STRING_VALUE) {
+      result_ = stringValue(builder_, 0);
     }
     else if (root_ == STRUCT_DEFINITION) {
       result_ = structDefinition(builder_, 0);
@@ -164,42 +182,85 @@ public class SpaghettiModuleParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // annotations?
-  // 	'module' moduleSpec
-  // 	moduleElement*
+  // '?'
+  public static boolean OPTIONAL(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "OPTIONAL")) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<optional>");
+    result_ = consumeToken(builder_, "?");
+    exit_section_(builder_, level_, marker_, OPTIONAL, result_, false, null);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // '+' | '-'
+  public static boolean SIGN(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "SIGN")) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<sign>");
+    result_ = consumeToken(builder_, "+");
+    if (!result_) result_ = consumeToken(builder_, "-");
+    exit_section_(builder_, level_, marker_, SIGN, result_, false, null);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // moduleSpec moduleElement*
   static boolean SpaghettiModuleDefinition(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SpaghettiModuleDefinition")) return false;
     boolean result_;
     Marker marker_ = enter_section_(builder_);
-    result_ = SpaghettiModuleDefinition_0(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, MODULE);
-    result_ = result_ && moduleSpec(builder_, level_ + 1);
-    result_ = result_ && SpaghettiModuleDefinition_3(builder_, level_ + 1);
+    result_ = moduleSpec(builder_, level_ + 1);
+    result_ = result_ && SpaghettiModuleDefinition_1(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
-  // annotations?
-  private static boolean SpaghettiModuleDefinition_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "SpaghettiModuleDefinition_0")) return false;
-    annotations(builder_, level_ + 1);
-    return true;
-  }
-
   // moduleElement*
-  private static boolean SpaghettiModuleDefinition_3(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "SpaghettiModuleDefinition_3")) return false;
+  private static boolean SpaghettiModuleDefinition_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "SpaghettiModuleDefinition_1")) return false;
     int pos_ = current_position_(builder_);
     while (true) {
       if (!moduleElement(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "SpaghettiModuleDefinition_3", pos_)) break;
+      if (!empty_element_parsed_guard_(builder_, "SpaghettiModuleDefinition_1", pos_)) break;
       pos_ = current_position_(builder_);
     }
     return true;
   }
 
   /* ********************************************************** */
-  // '@' ID (PL annotationParameters? PR)?
+  // qualifiedName ('as' ID)?
+  public static boolean aliasedName(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "aliasedName")) return false;
+    if (!nextTokenIs(builder_, ID)) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_);
+    result_ = qualifiedName(builder_, level_ + 1);
+    result_ = result_ && aliasedName_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, ALIASED_NAME, result_);
+    return result_;
+  }
+
+  // ('as' ID)?
+  private static boolean aliasedName_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "aliasedName_1")) return false;
+    aliasedName_1_0(builder_, level_ + 1);
+    return true;
+  }
+
+  // 'as' ID
+  private static boolean aliasedName_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "aliasedName_1_0")) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, "as");
+    result_ = result_ && consumeToken(builder_, ID);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // '@' ID ('(' annotationParameters? ')')?
   public static boolean annotation(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "annotation")) return false;
     boolean result_;
@@ -211,21 +272,21 @@ public class SpaghettiModuleParser implements PsiParser {
     return result_;
   }
 
-  // (PL annotationParameters? PR)?
+  // ('(' annotationParameters? ')')?
   private static boolean annotation_2(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "annotation_2")) return false;
     annotation_2_0(builder_, level_ + 1);
     return true;
   }
 
-  // PL annotationParameters? PR
+  // '(' annotationParameters? ')'
   private static boolean annotation_2_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "annotation_2_0")) return false;
     boolean result_;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, PL);
+    result_ = consumeToken(builder_, "(");
     result_ = result_ && annotation_2_0_1(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, PR);
+    result_ = result_ && consumeToken(builder_, ")");
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
@@ -305,9 +366,9 @@ public class SpaghettiModuleParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<annotation value>");
     result_ = consumeToken(builder_, NULL);
     if (!result_) result_ = boolValue(builder_, level_ + 1);
-    if (!result_) result_ = consumeToken(builder_, INTVALUE);
-    if (!result_) result_ = consumeToken(builder_, FLOATVALUE);
-    if (!result_) result_ = consumeToken(builder_, STRINGVALUE);
+    if (!result_) result_ = intValue(builder_, level_ + 1);
+    if (!result_) result_ = floatValue(builder_, level_ + 1);
+    if (!result_) result_ = stringValue(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, ANNOTATION_VALUE, result_, false, null);
     return result_;
   }
@@ -362,9 +423,9 @@ public class SpaghettiModuleParser implements PsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<const definition>");
     result_ = constDefinition_0(builder_, level_ + 1);
     result_ = result_ && consumeTokens(builder_, 0, CONST, ID);
-    result_ = result_ && consumeToken(builder_, CL);
+    result_ = result_ && consumeToken(builder_, "{");
     result_ = result_ && constDefinition_4(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, CR);
+    result_ = result_ && consumeToken(builder_, "}");
     exit_section_(builder_, level_, marker_, CONST_DEFINITION, result_, false, null);
     return result_;
   }
@@ -409,9 +470,9 @@ public class SpaghettiModuleParser implements PsiParser {
 
   /* ********************************************************** */
   // bool? ID '=' boolValue
-  // 	| int? ID '=' intValue
-  // 	| float? ID '=' floatValue
-  // 	| string? ID '=' stringValue
+  //     | int? ID '=' intValue
+  //     | float? ID '=' floatValue
+  //     | string? ID '=' stringValue
   public static boolean constEntryDecl(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "constEntryDecl")) return false;
     boolean result_;
@@ -452,7 +513,7 @@ public class SpaghettiModuleParser implements PsiParser {
     result_ = constEntryDecl_1_0(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, ID);
     result_ = result_ && consumeToken(builder_, "=");
-    result_ = result_ && consumeToken(builder_, INTVALUE);
+    result_ = result_ && intValue(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
@@ -472,7 +533,7 @@ public class SpaghettiModuleParser implements PsiParser {
     result_ = constEntryDecl_2_0(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, ID);
     result_ = result_ && consumeToken(builder_, "=");
-    result_ = result_ && consumeToken(builder_, FLOATVALUE);
+    result_ = result_ && floatValue(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
@@ -492,7 +553,7 @@ public class SpaghettiModuleParser implements PsiParser {
     result_ = constEntryDecl_3_0(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, ID);
     result_ = result_ && consumeToken(builder_, "=");
-    result_ = result_ && consumeToken(builder_, STRINGVALUE);
+    result_ = result_ && stringValue(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
@@ -505,17 +566,16 @@ public class SpaghettiModuleParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // annotations? 'enum' ID '{'	enumValue* '}'
+  // annotations? enum ID '{' enumValue* '}'
   public static boolean enumDefinition(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "enumDefinition")) return false;
     boolean result_;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<enum definition>");
     result_ = enumDefinition_0(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, ENUM);
-    result_ = result_ && consumeToken(builder_, ID);
-    result_ = result_ && consumeToken(builder_, CL);
+    result_ = result_ && consumeTokens(builder_, 0, ENUM, ID);
+    result_ = result_ && consumeToken(builder_, "{");
     result_ = result_ && enumDefinition_4(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, CR);
+    result_ = result_ && consumeToken(builder_, "}");
     exit_section_(builder_, level_, marker_, ENUM_DEFINITION, result_, false, null);
     return result_;
   }
@@ -579,41 +639,61 @@ public class SpaghettiModuleParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // import qualifiedName (AS ID)?
+  // SIGN? 'regexp:(0|[1-9][0-9]*)?\.[0-9]+'
+  public static boolean floatValue(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "floatValue")) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<float value>");
+    result_ = floatValue_0(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, "regexp:(0|[1-9][0-9]*)?\\.[0-9]+");
+    exit_section_(builder_, level_, marker_, FLOAT_VALUE, result_, false, null);
+    return result_;
+  }
+
+  // SIGN?
+  private static boolean floatValue_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "floatValue_0")) return false;
+    SIGN(builder_, level_ + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // import aliasedName
   public static boolean importDeclaration(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "importDeclaration")) return false;
     if (!nextTokenIs(builder_, IMPORT)) return false;
     boolean result_;
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, IMPORT);
-    result_ = result_ && qualifiedName(builder_, level_ + 1);
-    result_ = result_ && importDeclaration_2(builder_, level_ + 1);
+    result_ = result_ && aliasedName(builder_, level_ + 1);
     exit_section_(builder_, marker_, IMPORT_DECLARATION, result_);
     return result_;
   }
 
-  // (AS ID)?
-  private static boolean importDeclaration_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "importDeclaration_2")) return false;
-    importDeclaration_2_0(builder_, level_ + 1);
-    return true;
+  /* ********************************************************** */
+  // SIGN? 'regexp:0|[1-9][0-9]*'
+  public static boolean intValue(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "intValue")) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<int value>");
+    result_ = intValue_0(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, "regexp:0|[1-9][0-9]*");
+    exit_section_(builder_, level_, marker_, INT_VALUE, result_, false, null);
+    return result_;
   }
 
-  // AS ID
-  private static boolean importDeclaration_2_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "importDeclaration_2_0")) return false;
-    boolean result_;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, AS, ID);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
+  // SIGN?
+  private static boolean intValue_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "intValue_0")) return false;
+    SIGN(builder_, level_ + 1);
+    return true;
   }
 
   /* ********************************************************** */
   // annotations?
-  // 	interface ID typeParameters?
-  // 	( extends superInterfaceDefinition ( ',' superInterfaceDefinition )* )?
-  // 	'{' interfaceMethodDefinition* '}'
+  //     interface ID typeParameters?
+  //     ( extends superInterfaceDefinition ( ',' superInterfaceDefinition )* )?
+  //     '{' interfaceMethodDefinition* '}'
   public static boolean interfaceDefinition(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "interfaceDefinition")) return false;
     boolean result_;
@@ -622,9 +702,9 @@ public class SpaghettiModuleParser implements PsiParser {
     result_ = result_ && consumeTokens(builder_, 0, INTERFACE, ID);
     result_ = result_ && interfaceDefinition_3(builder_, level_ + 1);
     result_ = result_ && interfaceDefinition_4(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, CL);
+    result_ = result_ && consumeToken(builder_, "{");
     result_ = result_ && interfaceDefinition_6(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, CR);
+    result_ = result_ && consumeToken(builder_, "}");
     exit_section_(builder_, level_, marker_, INTERFACE_DEFINITION, result_, false, null);
     return result_;
   }
@@ -726,9 +806,9 @@ public class SpaghettiModuleParser implements PsiParser {
     result_ = result_ && methodDefinition_1(builder_, level_ + 1);
     result_ = result_ && returnType(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, ID);
-    result_ = result_ && consumeToken(builder_, PL);
+    result_ = result_ && consumeToken(builder_, "(");
     result_ = result_ && methodDefinition_5(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, PR);
+    result_ = result_ && consumeToken(builder_, ")");
     exit_section_(builder_, level_, marker_, METHOD_DEFINITION, result_, false, null);
     return result_;
   }
@@ -769,7 +849,7 @@ public class SpaghettiModuleParser implements PsiParser {
   // OPTIONAL?
   private static boolean methodParameter_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "methodParameter_0")) return false;
-    consumeToken(builder_, OPTIONAL);
+    OPTIONAL(builder_, level_ + 1);
     return true;
   }
 
@@ -842,33 +922,23 @@ public class SpaghettiModuleParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // qualifiedName (AS ID)?
+  // annotations? module aliasedName
   public static boolean moduleSpec(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "moduleSpec")) return false;
-    if (!nextTokenIs(builder_, ID)) return false;
     boolean result_;
-    Marker marker_ = enter_section_(builder_);
-    result_ = qualifiedName(builder_, level_ + 1);
-    result_ = result_ && moduleSpec_1(builder_, level_ + 1);
-    exit_section_(builder_, marker_, MODULE_SPEC, result_);
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<module spec>");
+    result_ = moduleSpec_0(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, MODULE);
+    result_ = result_ && aliasedName(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, MODULE_SPEC, result_, false, null);
     return result_;
   }
 
-  // (AS ID)?
-  private static boolean moduleSpec_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "moduleSpec_1")) return false;
-    moduleSpec_1_0(builder_, level_ + 1);
+  // annotations?
+  private static boolean moduleSpec_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "moduleSpec_0")) return false;
+    annotations(builder_, level_ + 1);
     return true;
-  }
-
-  // AS ID
-  private static boolean moduleSpec_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "moduleSpec_1_0")) return false;
-    boolean result_;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, AS, ID);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
   }
 
   /* ********************************************************** */
@@ -907,7 +977,7 @@ public class SpaghettiModuleParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // annotations?	OPTIONAL? typeNamePair
+  // annotations? OPTIONAL? typeNamePair
   public static boolean propertyDefinition(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "propertyDefinition")) return false;
     boolean result_;
@@ -929,7 +999,7 @@ public class SpaghettiModuleParser implements PsiParser {
   // OPTIONAL?
   private static boolean propertyDefinition_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "propertyDefinition_1")) return false;
-    consumeToken(builder_, OPTIONAL);
+    OPTIONAL(builder_, level_ + 1);
     return true;
   }
 
@@ -982,9 +1052,20 @@ public class SpaghettiModuleParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // "regexp:(\"([^\"\\]|\\.)*\")"
+  public static boolean stringValue(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "stringValue")) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<string value>");
+    result_ = consumeToken(builder_, "regexp:(\"([^\"\\]|\\.)*\")");
+    exit_section_(builder_, level_, marker_, STRING_VALUE, result_, false, null);
+    return result_;
+  }
+
+  /* ********************************************************** */
   // annotations?
-  // 	struct ID typeParameters?
-  // 	'{' propertyDefinition* '}'
+  //     struct ID typeParameters?
+  //     '{' propertyDefinition* '}'
   public static boolean structDefinition(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "structDefinition")) return false;
     boolean result_;
@@ -992,9 +1073,9 @@ public class SpaghettiModuleParser implements PsiParser {
     result_ = structDefinition_0(builder_, level_ + 1);
     result_ = result_ && consumeTokens(builder_, 0, STRUCT, ID);
     result_ = result_ && structDefinition_3(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, CL);
+    result_ = result_ && consumeToken(builder_, "{");
     result_ = result_ && structDefinition_5(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, CR);
+    result_ = result_ && consumeToken(builder_, "}");
     exit_section_(builder_, level_, marker_, STRUCT_DEFINITION, result_, false, null);
     return result_;
   }
@@ -1157,9 +1238,9 @@ public class SpaghettiModuleParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "typeChain_1")) return false;
     boolean result_;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, PL);
+    result_ = consumeToken(builder_, "(");
     result_ = result_ && typeChainElements(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, PR);
+    result_ = result_ && consumeToken(builder_, ")");
     result_ = result_ && typeChain_1_3(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
@@ -1266,9 +1347,9 @@ public class SpaghettiModuleParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "typeChainElement_1")) return false;
     boolean result_;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, PL);
+    result_ = consumeToken(builder_, "(");
     result_ = result_ && typeChain(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, PR);
+    result_ = result_ && consumeToken(builder_, ")");
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }

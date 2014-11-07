@@ -24,20 +24,8 @@ public class SpaghettiModuleImportDeclarationImpl extends ASTWrapperPsiElement i
 
   @Override
   @NotNull
-  public SpaghettiModuleQualifiedName getQualifiedName() {
-    return findNotNullChildByClass(SpaghettiModuleQualifiedName.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getId() {
-    return findChildByType(ID);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getImport() {
-    return findNotNullChildByType(IMPORT);
+  public SpaghettiModuleAliasedName getAliasedName() {
+    return findNotNullChildByClass(SpaghettiModuleAliasedName.class);
   }
 
 }

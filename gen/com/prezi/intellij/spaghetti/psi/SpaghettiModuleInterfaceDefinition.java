@@ -22,12 +22,6 @@ public interface SpaghettiModuleInterfaceDefinition extends SpaghettiModuleNamed
   @NotNull
   PsiElement getId();
 
-  @Nullable
-  PsiElement getExtends();
-
-  @NotNull
-  PsiElement getInterface();
-
   String getName();
 
   PsiElement getNameIdentifier();
