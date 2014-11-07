@@ -29,7 +29,11 @@ public class SpaghettiModuleFoldingBuilder implements FoldingBuilder {
 		return list.toArray(descriptors);
 	}
 	private static void buildFolding(ASTNode node, List<FoldingDescriptor> list) {
-		if (node.getElementType() == SpaghettiModuleTypes.INTERFACE_DEFINITION) {
+		if (node.getElementType() == SpaghettiModuleTypes.INTERFACE_DEFINITION ||
+			node.getElementType() == SpaghettiModuleTypes.STRUCT_DEFINITION ||
+			node.getElementType() == SpaghettiModuleTypes.ENUM_DEFINITION ||
+			node.getElementType() == SpaghettiModuleTypes.CONST_DEFINITION
+			) {
 			final TextRange range = node.getTextRange();
 			list.add(new FoldingDescriptor(node, range));
 		}
@@ -41,7 +45,19 @@ public class SpaghettiModuleFoldingBuilder implements FoldingBuilder {
 	@Override
 	public String getPlaceholderText(@NotNull ASTNode node) {
 		ASTNode name = node.findChildByType(SpaghettiModuleTypes.ID);
-		return name == null ? null : "interface " + name.getText() + "{...}";
+		if (node.findChildByType(SpaghettiModuleTypes.INTERFACE) != null) {
+			return name == null ? null : "interface " + name.getText() + "{...}";
+		}
+		else if (node.findChildByType(SpaghettiModuleTypes.STRUCT) != null) {
+			return name == null ? null : "struct " + name.getText() + "{...}";
+		}
+		else if (node.findChildByType(SpaghettiModuleTypes.ENUM) != null) {
+			return name == null ? null : "enum " + name.getText() + "{...}";
+		}
+		else if (node.findChildByType(SpaghettiModuleTypes.CONST) != null) {
+			return name == null ? null : "const " + name.getText() + "{...}";
+		}
+		return null;
 	}
 	@Override
 	public boolean isCollapsedByDefault(@NotNull ASTNode node) {
