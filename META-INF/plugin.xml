@@ -1,17 +1,15 @@
 <idea-plugin version="2">
-  <id>com.yourcompany.unique.plugin.id</id>
-  <name>Plugin display name here</name>
+  <id>com.prezi.intellij.spaghetti.id</id>
+  <name>Prezi Spaghetti plugin</name>
   <version>1.0</version>
-  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+  <vendor email="support@prezi.com" url="http://prezi.com">Prezi</vendor>
 
   <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <small>most HTML tags may be used</small>
-      ]]></description>
+      Spaghetti provides type-safe communication between JavaScript modules.<br/>
+      Because of the untyped nature of JavaScript, modularizing large, evolving JavaScript applications is difficult. To help keep track of changing APIs, Spaghetti uses compilers to check communication between modules, transforming run-time API compatibility problems into more manageable compile errors.]]></description>
 
   <change-notes><![CDATA[
-      Add change notes here.<br>
-      <small>most HTML tags may be used</small>
+
       ]]>
   </change-notes>
 
