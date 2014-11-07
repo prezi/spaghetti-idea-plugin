@@ -30,6 +30,7 @@
 	extends = 'extends'
 	interface = 'interface'
 	struct = 'struct'
+	enum = 'enum'
   	void = 'void'
   	any = 'any'
   	bool = 'bool'

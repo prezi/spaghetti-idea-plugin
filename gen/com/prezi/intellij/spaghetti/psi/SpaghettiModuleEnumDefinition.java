@@ -16,4 +16,7 @@ public interface SpaghettiModuleEnumDefinition extends PsiElement {
   @NotNull
   PsiElement getId();
 
+  @NotNull
+  PsiElement getEnum();
+
 }

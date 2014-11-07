@@ -5,7 +5,7 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
 import com.intellij.openapi.diagnostic.Logger;
 import static com.prezi.intellij.spaghetti.psi.SpaghettiModuleTypes.*;
-import static com.prezi.intellij.spaghetti.parser.SpaghettiModuleParserUtil.*;
+import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.tree.TokenSet;
@@ -512,7 +512,7 @@ public class SpaghettiModuleParser implements PsiParser {
     boolean result_;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<enum definition>");
     result_ = enumDefinition_0(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, "enum");
+    result_ = result_ && consumeToken(builder_, ENUM);
     result_ = result_ && consumeToken(builder_, ID);
     result_ = result_ && consumeToken(builder_, CL);
     result_ = result_ && enumDefinition_4(builder_, level_ + 1);

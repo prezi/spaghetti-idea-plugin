@@ -57,6 +57,7 @@ public interface SpaghettiModuleTypes {
   IElementType COMMENT = new SpaghettiModuleTokenType("COMMENT");
   IElementType CONST = new SpaghettiModuleTokenType("const");
   IElementType CR = new SpaghettiModuleTokenType("}");
+  IElementType ENUM = new SpaghettiModuleTokenType("enum");
   IElementType EXTENDS = new SpaghettiModuleTokenType("extends");
   IElementType EXTERN = new SpaghettiModuleTokenType("extern");
   IElementType FALSE = new SpaghettiModuleTokenType("false");

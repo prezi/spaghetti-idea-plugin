@@ -24,8 +24,29 @@ import java.io.Reader;
 public class SpaghettiModuleParserDefinition implements ParserDefinition{
     public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
     public static final TokenSet COMMENTS = TokenSet.create(SpaghettiModuleTypes.COMMENT);
+    public static final TokenSet KEYWORDS = TokenSet.create(SpaghettiModuleTypes.INTERFACE,
+															SpaghettiModuleTypes.ENUM,
+															SpaghettiModuleTypes.MODULE,
+															SpaghettiModuleTypes.AS,
+															SpaghettiModuleTypes.STRUCT,
+															SpaghettiModuleTypes.CONST,
+															SpaghettiModuleTypes.EXTERN,
+															SpaghettiModuleTypes.EXTENDS);
 
-    public static final IFileElementType FILE = new IFileElementType(Language.<SpaghettiModuleLanguage>findInstance(SpaghettiModuleLanguage.class));
+	public static final TokenSet PRIMITIVE_TYPES = TokenSet.create(SpaghettiModuleTypes.INT,
+														 SpaghettiModuleTypes.FLOAT,
+														 SpaghettiModuleTypes.STRING,
+														 SpaghettiModuleTypes.VOID);
+
+	public static final TokenSet PRIMITIVE_VALUES = TokenSet.create(SpaghettiModuleTypes.TRUE,
+																	SpaghettiModuleTypes.FALSE,
+																	SpaghettiModuleTypes.ANY,
+																	SpaghettiModuleTypes.NULL);
+
+	public static final TokenSet NUMBER_VALUES = TokenSet.create(SpaghettiModuleTypes.INTVALUE,
+																 SpaghettiModuleTypes.FLOATVALUE);
+
+	public static final IFileElementType FILE = new IFileElementType(Language.<SpaghettiModuleLanguage>findInstance(SpaghettiModuleLanguage.class));
 
     @NotNull
     @Override
