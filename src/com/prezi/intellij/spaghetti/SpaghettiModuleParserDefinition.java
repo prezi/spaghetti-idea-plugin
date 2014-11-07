@@ -27,7 +27,6 @@ public class SpaghettiModuleParserDefinition implements ParserDefinition{
     public static final TokenSet KEYWORDS = TokenSet.create(SpaghettiModuleTypes.INTERFACE,
 															SpaghettiModuleTypes.ENUM,
 															SpaghettiModuleTypes.MODULE,
-															SpaghettiModuleTypes.AS,
 															SpaghettiModuleTypes.STRUCT,
 															SpaghettiModuleTypes.CONST,
 															SpaghettiModuleTypes.EXTERN,
@@ -43,8 +42,8 @@ public class SpaghettiModuleParserDefinition implements ParserDefinition{
 																	SpaghettiModuleTypes.ANY,
 																	SpaghettiModuleTypes.NULL);
 
-	public static final TokenSet NUMBER_VALUES = TokenSet.create(SpaghettiModuleTypes.INTVALUE,
-																 SpaghettiModuleTypes.FLOATVALUE);
+	public static final TokenSet NUMBER_VALUES = TokenSet.create(SpaghettiModuleTypes.INT_VALUE,
+																 SpaghettiModuleTypes.FLOAT_VALUE);
 
 	public static final IFileElementType FILE = new IFileElementType(Language.<SpaghettiModuleLanguage>findInstance(SpaghettiModuleLanguage.class));
 
