@@ -24,26 +24,36 @@ import java.io.Reader;
 public class SpaghettiModuleParserDefinition implements ParserDefinition{
     public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
     public static final TokenSet COMMENTS = TokenSet.create(SpaghettiModuleTypes.COMMENT);
-    public static final TokenSet KEYWORDS = TokenSet.create(SpaghettiModuleTypes.INTERFACE,
-															SpaghettiModuleTypes.ENUM,
-															SpaghettiModuleTypes.MODULE,
-															SpaghettiModuleTypes.STRUCT,
-															SpaghettiModuleTypes.CONST,
-															SpaghettiModuleTypes.EXTERN,
-															SpaghettiModuleTypes.EXTENDS);
+    public static final TokenSet KEYWORDS = TokenSet.create(
+			SpaghettiModuleTypes.CONST,
+			SpaghettiModuleTypes.ENUM,
+			SpaghettiModuleTypes.EXTERN,
+			SpaghettiModuleTypes.EXTENDS,
+			SpaghettiModuleTypes.IMPORT,
+			SpaghettiModuleTypes.INTERFACE,
+			SpaghettiModuleTypes.MODULE,
+			SpaghettiModuleTypes.STRUCT
+	);
 
-	public static final TokenSet PRIMITIVE_TYPES = TokenSet.create(SpaghettiModuleTypes.INT,
-														 SpaghettiModuleTypes.FLOAT,
-														 SpaghettiModuleTypes.STRING,
-														 SpaghettiModuleTypes.VOID);
+	public static final TokenSet PRIMITIVE_TYPES = TokenSet.create(
+			SpaghettiModuleTypes.ANY,
+			SpaghettiModuleTypes.BOOL,
+			SpaghettiModuleTypes.FLOAT,
+			SpaghettiModuleTypes.INT,
+			SpaghettiModuleTypes.STRING,
+			SpaghettiModuleTypes.VOID
+	);
 
-	public static final TokenSet PRIMITIVE_VALUES = TokenSet.create(SpaghettiModuleTypes.TRUE,
-																	SpaghettiModuleTypes.FALSE,
-																	SpaghettiModuleTypes.ANY,
-																	SpaghettiModuleTypes.NULL);
+	public static final TokenSet PRIMITIVE_VALUES = TokenSet.create(
+			SpaghettiModuleTypes.FALSE,
+			SpaghettiModuleTypes.NULL,
+			SpaghettiModuleTypes.TRUE
+	);
 
-	public static final TokenSet NUMBER_VALUES = TokenSet.create(SpaghettiModuleTypes.INTVALUE,
-																 SpaghettiModuleTypes.FLOATVALUE);
+	public static final TokenSet NUMBER_VALUES = TokenSet.create(
+			SpaghettiModuleTypes.FLOATVALUE,
+			SpaghettiModuleTypes.INTVALUE
+	);
 
 	public static final IFileElementType FILE = new IFileElementType(Language.<SpaghettiModuleLanguage>findInstance(SpaghettiModuleLanguage.class));
 
