@@ -49,7 +49,7 @@ public class SpaghettiModuleSyntaxHighlighter extends SyntaxHighlighterBase {
 		else if (SpaghettiModuleParserDefinition.NUMBER_VALUES.contains(tokenType)) {
 			return NUMBER_KEYS;
 		}
-		else if (tokenType.equals(SpaghettiModuleTypes.STRING_VALUE)) {
+		else if (tokenType.equals(SpaghettiModuleTypes.STRINGVALUE)) {
 			return STRING_KEYS;
 		}
 		return new TextAttributesKey[0];
