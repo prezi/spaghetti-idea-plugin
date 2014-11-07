@@ -19,7 +19,7 @@ public class SpaghettiModuleReferenceContributor extends PsiReferenceContributor
                         PsiLiteralExpression literalExpression = (PsiLiteralExpression) element;
                         String text = (String) literalExpression.getValue();
                         if (text != null) {
-                            return new PsiReference[]{new SpaghettiModuleReference(element, new TextRange(8, text.length() + 1))};
+                            return new PsiReference[]{new SpaghettiModuleReference(element, new TextRange(0, text.length() + 1))};
                         }
                         return new PsiReference[0];
                     }
