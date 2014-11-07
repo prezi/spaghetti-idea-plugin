@@ -1,6 +1,6 @@
 package com.prezi.intellij.spaghetti;
 
-import com.intellij.openapi.editor.SyntaxHighlighterColors;
+import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
@@ -11,12 +11,12 @@ import org.jetbrains.annotations.NotNull;
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
 
 public class SpaghettiModuleSyntaxHighlighter extends SyntaxHighlighterBase {
-	public static final TextAttributesKey COMMENT = createTextAttributesKey("SPAGHETTI_MODULE_COMMENT", SyntaxHighlighterColors.LINE_COMMENT);
-	public static final TextAttributesKey NUMBER = createTextAttributesKey("SPAGHETTI_MODULE_NUMBER", SyntaxHighlighterColors.NUMBER);
-	public static final TextAttributesKey STRING = createTextAttributesKey("SPAGHETTI_MODULE_STRING", SyntaxHighlighterColors.STRING);
-	public static final TextAttributesKey KEY = createTextAttributesKey("SPAGHETTI_MODULE_KEY", SyntaxHighlighterColors.KEYWORD);
-	public static final TextAttributesKey PRIMITIVE_TYPE = createTextAttributesKey("SPAGHETTI_MODULE_TYPE", SyntaxHighlighterColors.KEYWORD);
-	public static final TextAttributesKey PRIMITIVE_VALUES = createTextAttributesKey("SPAGHETTI_MODULE_VALUES", SyntaxHighlighterColors.KEYWORD);
+	public static final TextAttributesKey COMMENT = createTextAttributesKey("SPAGHETTI_MODULE_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
+	public static final TextAttributesKey NUMBER = createTextAttributesKey("SPAGHETTI_MODULE_NUMBER", DefaultLanguageHighlighterColors.NUMBER);
+	public static final TextAttributesKey STRING = createTextAttributesKey("SPAGHETTI_MODULE_STRING", DefaultLanguageHighlighterColors.STRING);
+	public static final TextAttributesKey KEY = createTextAttributesKey("SPAGHETTI_MODULE_KEY", DefaultLanguageHighlighterColors.KEYWORD);
+	public static final TextAttributesKey PRIMITIVE_TYPE = createTextAttributesKey("SPAGHETTI_MODULE_TYPE", DefaultLanguageHighlighterColors.KEYWORD);
+	public static final TextAttributesKey PRIMITIVE_VALUES = createTextAttributesKey("SPAGHETTI_MODULE_VALUES", DefaultLanguageHighlighterColors.KEYWORD);
 
 	private static final TextAttributesKey[] COMMENT_KEYS = new TextAttributesKey[]{ COMMENT };
 	private static final TextAttributesKey[] KEY_KEYS = new TextAttributesKey[]{ KEY };
