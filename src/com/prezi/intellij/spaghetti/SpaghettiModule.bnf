@@ -16,8 +16,11 @@
   psiImplUtilClass="com.prezi.intellij.spaghetti.psi.impl.SpaghettiModulePsiImplUtil"
 
   tokens = [
-    ID = "regexp:\w*"
     COMMENT = 'regexp:(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|(//.*)'
+    floatValue='regexp:\d+(\.\d*)'
+    intValue='regexp:\d+'
+	stringValue = "regexp:(\"([^\"\\]|\\.)*\")"
+    ID = "regexp:\w*"
   ]
 }
 
@@ -117,9 +120,6 @@ annotationParameter ::= ID '=' annotationValue
 annotationValue ::= null | boolValue | intValue | floatValue | stringValue
 
 boolValue ::= true | false
-intValue ::= SIGN? 'regexp:0|[1-9][0-9]*'
-floatValue ::= SIGN? 'regexp:(0|[1-9][0-9]*)?\.[0-9]+'
-stringValue ::= "regexp:(\"([^\"\\]|\\.)*\")"
 
 OPTIONAL ::= '?'
 SIGN ::= '+' | '-'
