@@ -1,6 +1,7 @@
 package com.prezi.intellij.spaghetti;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.lang.folding.FoldingBuilder;
 import com.intellij.lang.folding.FoldingBuilderEx;
 import com.intellij.lang.folding.FoldingDescriptor;
 import com.intellij.openapi.editor.Document;
@@ -9,6 +10,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.prezi.intellij.spaghetti.psi.SpaghettiModuleInterfaceDefinition;
+import com.prezi.intellij.spaghetti.psi.SpaghettiModuleTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,38 +18,31 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class SpaghettiModuleFoldingBuilder extends FoldingBuilderEx {
+
+public class SpaghettiModuleFoldingBuilder implements FoldingBuilder {
 	@NotNull
 	@Override
-	public FoldingDescriptor[] buildFoldRegions(@NotNull PsiElement root, @NotNull Document document, boolean quick) {
-		FoldingGroup group = FoldingGroup.newGroup("SpaghettiModule");
-
-		List<FoldingDescriptor> descriptors = new ArrayList<FoldingDescriptor>();
-		Collection<SpaghettiModuleInterfaceDefinition> interfaceDefinitions = PsiTreeUtil.findChildrenOfType(root, SpaghettiModuleInterfaceDefinition.class);
-		for (final SpaghettiModuleInterfaceDefinition interfaceDefinition : interfaceDefinitions) {
-			String value = interfaceDefinition.getName();
-			if (value != null) {
-
-				descriptors.add(new FoldingDescriptor(interfaceDefinition.getNode(),
-						new TextRange(interfaceDefinition.getTextRange().getStartOffset(),
-								interfaceDefinition.getTextRange().getEndOffset()), group) {
-					@Nullable
-					@Override
-					public String getPlaceholderText() {
-						return "interface " + interfaceDefinition.getName();
-					}
-				});
-			}
-		}
-		return descriptors.toArray(new FoldingDescriptor[descriptors.size()]);
+	public FoldingDescriptor[] buildFoldRegions(@NotNull ASTNode node, @NotNull Document document) {
+		List<FoldingDescriptor> list = new ArrayList<FoldingDescriptor>();
+		buildFolding(node, list);
+		FoldingDescriptor[] descriptors = new FoldingDescriptor[list.size()];
+		return list.toArray(descriptors);
 	}
-
+	private static void buildFolding(ASTNode node, List<FoldingDescriptor> list) {
+		if (node.getElementType() == SpaghettiModuleTypes.INTERFACE_DEFINITION) {
+			final TextRange range = node.getTextRange();
+			list.add(new FoldingDescriptor(node, range));
+		}
+		for (ASTNode child : node.getChildren(null)) {
+			buildFolding(child, list);
+		}
+	}
 	@Nullable
 	@Override
 	public String getPlaceholderText(@NotNull ASTNode node) {
-		return "...";
+		ASTNode name = node.findChildByType(SpaghettiModuleTypes.ID);
+		return name == null ? null : "interface " + name.getText() + "{...}";
 	}
-
 	@Override
 	public boolean isCollapsedByDefault(@NotNull ASTNode node) {
 		return true;
