@@ -22,7 +22,7 @@
     PR=')'
   	CL = '{'
   	CR = '}'
-  	AS = 'AS'
+  	AS = 'as'
   	const = 'const'
 	module = 'module'
 	import = 'import'
@@ -50,9 +50,7 @@ SpaghettiModuleDefinition ::=
 //	comment?
 	annotations?
 	'module' moduleSpec
-	CL
 	moduleElement*
-	CR
 
 moduleSpec ::= qualifiedName (AS ID)?
 
