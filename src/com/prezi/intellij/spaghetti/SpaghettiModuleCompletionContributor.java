@@ -15,7 +15,24 @@ public class SpaghettiModuleCompletionContributor extends CompletionContributor 
                     public void addCompletions(@NotNull CompletionParameters parameters,
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
-                        resultSet.addElement(LookupElementBuilder.create("hello"));
+                        resultSet.addElement(LookupElementBuilder.create("interface"));
+                        resultSet.addElement(LookupElementBuilder.create("module"));
+                        resultSet.addElement(LookupElementBuilder.create("import"));
+                        resultSet.addElement(LookupElementBuilder.create("extern"));
+                        resultSet.addElement(LookupElementBuilder.create("interface"));
+                        resultSet.addElement(LookupElementBuilder.create("extends"));
+                        resultSet.addElement(LookupElementBuilder.create("struct"));
+                        resultSet.addElement(LookupElementBuilder.create("const"));
+                        resultSet.addElement(LookupElementBuilder.create("bool"));
+                        resultSet.addElement(LookupElementBuilder.create("int"));
+                        resultSet.addElement(LookupElementBuilder.create("float"));
+                        resultSet.addElement(LookupElementBuilder.create("string"));
+                        resultSet.addElement(LookupElementBuilder.create("enum"));
+                        resultSet.addElement(LookupElementBuilder.create("void"));
+                        resultSet.addElement(LookupElementBuilder.create("any"));
+                        resultSet.addElement(LookupElementBuilder.create("null"));
+                        resultSet.addElement(LookupElementBuilder.create("true"));
+                        resultSet.addElement(LookupElementBuilder.create("false"));
                     }
                 }
         );
