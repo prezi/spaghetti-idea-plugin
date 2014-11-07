@@ -66,7 +66,9 @@ interfaceDefinition ::=
  	annotations?
 	interface ID typeParameters?
 	( extends superInterfaceDefinition ( ',' superInterfaceDefinition )* )?
-	'{' interfaceMethodDefinition* '}'
+	'{' interfaceMethodDefinition* '}' {mixin="com.prezi.intellij.spaghetti.psi.impl.SpaghettiModuleNamedElementImpl"
+       implements="com.prezi.intellij.spaghetti.psi.SpaghettiModuleNamedElement" methods=[getName]}
+
 
 structDefinition ::=
 	annotations?
