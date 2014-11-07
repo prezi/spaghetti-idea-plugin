@@ -5,7 +5,7 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
 import com.intellij.openapi.diagnostic.Logger;
 import static com.prezi.intellij.spaghetti.psi.SpaghettiModuleTypes.*;
-import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+import static com.prezi.intellij.spaghetti.parser.SpaghettiModuleParserUtil.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.tree.TokenSet;
@@ -163,9 +163,7 @@ public class SpaghettiModuleParser implements PsiParser {
   /* ********************************************************** */
   // annotations?
   // 	'module' moduleSpec
-  // 	CL
   // 	moduleElement*
-  // 	CR
   static boolean SpaghettiModuleDefinition(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SpaghettiModuleDefinition")) return false;
     boolean result_;
@@ -173,9 +171,7 @@ public class SpaghettiModuleParser implements PsiParser {
     result_ = SpaghettiModuleDefinition_0(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, MODULE);
     result_ = result_ && moduleSpec(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, CL);
-    result_ = result_ && SpaghettiModuleDefinition_4(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, CR);
+    result_ = result_ && SpaghettiModuleDefinition_3(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
@@ -188,12 +184,12 @@ public class SpaghettiModuleParser implements PsiParser {
   }
 
   // moduleElement*
-  private static boolean SpaghettiModuleDefinition_4(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "SpaghettiModuleDefinition_4")) return false;
+  private static boolean SpaghettiModuleDefinition_3(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "SpaghettiModuleDefinition_3")) return false;
     int pos_ = current_position_(builder_);
     while (true) {
       if (!moduleElement(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "SpaghettiModuleDefinition_4", pos_)) break;
+      if (!empty_element_parsed_guard_(builder_, "SpaghettiModuleDefinition_3", pos_)) break;
       pos_ = current_position_(builder_);
     }
     return true;

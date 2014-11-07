@@ -37,7 +37,7 @@ STRINGVALUE=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   ")"                { return PR; }
   "{"                { return CL; }
   "}"                { return CR; }
-  "AS"               { return AS; }
+  "as"               { return AS; }
   "const"            { return CONST; }
   "module"           { return MODULE; }
   "import"           { return IMPORT; }
@@ -45,6 +45,7 @@ STRINGVALUE=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   "extends"          { return EXTENDS; }
   "interface"        { return INTERFACE; }
   "struct"           { return STRUCT; }
+  "enum"             { return ENUM; }
   "void"             { return VOID; }
   "any"              { return ANY; }
   "bool"             { return BOOL; }

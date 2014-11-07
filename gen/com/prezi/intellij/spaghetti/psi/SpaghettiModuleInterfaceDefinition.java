@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface SpaghettiModuleInterfaceDefinition extends PsiElement {
+public interface SpaghettiModuleInterfaceDefinition extends SpaghettiModuleNamedElement {
 
   @Nullable
   SpaghettiModuleAnnotations getAnnotations();
@@ -27,5 +27,7 @@ public interface SpaghettiModuleInterfaceDefinition extends PsiElement {
 
   @NotNull
   PsiElement getInterface();
+
+  String getName();
 
 }

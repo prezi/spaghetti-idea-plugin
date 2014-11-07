@@ -68,7 +68,7 @@ public class SpaghettiModuleVisitor extends PsiElementVisitor {
   }
 
   public void visitInterfaceDefinition(@NotNull SpaghettiModuleInterfaceDefinition o) {
-    visitPsiElement(o);
+    visitNamedElement(o);
   }
 
   public void visitInterfaceMethodDefinition(@NotNull SpaghettiModuleInterfaceMethodDefinition o) {
@@ -160,6 +160,10 @@ public class SpaghettiModuleVisitor extends PsiElementVisitor {
   }
 
   public void visitTypeParameters(@NotNull SpaghettiModuleTypeParameters o) {
+    visitPsiElement(o);
+  }
+
+  public void visitNamedElement(@NotNull SpaghettiModuleNamedElement o) {
     visitPsiElement(o);
   }
 

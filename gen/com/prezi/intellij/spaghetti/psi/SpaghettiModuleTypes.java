@@ -4,8 +4,6 @@ package com.prezi.intellij.spaghetti.psi;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.PsiElement;
 import com.intellij.lang.ASTNode;
-import com.prezi.intellij.spaghetti.SpaghettiModuleElementType;
-import com.prezi.intellij.spaghetti.SpaghettiModuleTokenType;
 import com.prezi.intellij.spaghetti.psi.impl.*;
 
 public interface SpaghettiModuleTypes {
@@ -51,7 +49,7 @@ public interface SpaghettiModuleTypes {
   IElementType TYPE_PARAMETERS = new SpaghettiModuleElementType("TYPE_PARAMETERS");
 
   IElementType ANY = new SpaghettiModuleTokenType("any");
-  IElementType AS = new SpaghettiModuleTokenType("AS");
+  IElementType AS = new SpaghettiModuleTokenType("as");
   IElementType BOOL = new SpaghettiModuleTokenType("bool");
   IElementType CL = new SpaghettiModuleTokenType("{");
   IElementType COMMENT = new SpaghettiModuleTokenType("COMMENT");

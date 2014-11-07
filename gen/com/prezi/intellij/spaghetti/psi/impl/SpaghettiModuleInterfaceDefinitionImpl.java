@@ -8,10 +8,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.prezi.intellij.spaghetti.psi.SpaghettiModuleTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.prezi.intellij.spaghetti.psi.*;
 
-public class SpaghettiModuleInterfaceDefinitionImpl extends ASTWrapperPsiElement implements SpaghettiModuleInterfaceDefinition {
+public class SpaghettiModuleInterfaceDefinitionImpl extends SpaghettiModuleNamedElementImpl implements SpaghettiModuleInterfaceDefinition {
 
   public SpaghettiModuleInterfaceDefinitionImpl(ASTNode node) {
     super(node);
@@ -62,6 +61,10 @@ public class SpaghettiModuleInterfaceDefinitionImpl extends ASTWrapperPsiElement
   @NotNull
   public PsiElement getInterface() {
     return findNotNullChildByType(INTERFACE);
+  }
+
+  public String getName() {
+    return SpaghettiModulePsiImplUtil.getName(this);
   }
 
 }
