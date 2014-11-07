@@ -105,19 +105,21 @@ methodParameter	::= OPTIONAL? typeNamePair
 
 typeNamePair ::= complexType ID
 
-returnType ::= void | complexType
-
-complexType ::= type | typeChain
+complexType ::= typeChain | type
 
 type ::= primitiveType ArrayQualifier* | objectType ArrayQualifier*
 
-typeChain ::= typeChainElements | '(' typeChainElements ')' ArrayQualifier+
+typeChain ::=  typeChainElements | '(' typeChainElements ')' ArrayQualifier+
 
-typeChainElements ::= void '->' typeChainReturnType | typeChainElement ( '->' typeChainElement )* '->' typeChainReturnType
+typeChainElements ::= typeChainArguments '->' typeChainReturnType
 
-typeChainReturnType ::= void | typeChainElement
+typeChainArguments ::= typeChainElement ( '->' typeChainElement &('->' typeChainReturnType) )* | void
 
 typeChainElement ::= type | '(' typeChain ')'
+
+typeChainReturnType ::= typeChainElement | void
+
+returnType ::= complexType | void
 
 objectType ::= qualifiedName typeArguments?
 
@@ -135,10 +137,10 @@ typeArguments ::= '<' returnType ( ',' returnType )* '>'
 
 annotations ::= annotation+
 
-annotation ::= '@' id (PL annotationParameters? PR)?
+annotation ::= '@' ID (PL annotationParameters? PR)?
 
 annotationParameters ::= annotationValue | annotationParameter ( ',' annotationParameter )*
 
-annotationParameter ::= id '=' annotationValue
+annotationParameter ::= ID '=' annotationValue
 
 annotationValue	::= null | boolValue | intValue | floatValue | stringValue
