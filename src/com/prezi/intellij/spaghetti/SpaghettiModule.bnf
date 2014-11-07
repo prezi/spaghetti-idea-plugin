@@ -67,7 +67,7 @@ interfaceDefinition ::=
 	interface ID typeParameters?
 	( extends superInterfaceDefinition ( ',' superInterfaceDefinition )* )?
 	'{' interfaceMethodDefinition* '}' {mixin="com.prezi.intellij.spaghetti.psi.impl.SpaghettiModuleNamedElementImpl"
-       implements="com.prezi.intellij.spaghetti.psi.SpaghettiModuleNamedElement" methods=[getName]}
+       implements="com.prezi.intellij.spaghetti.psi.SpaghettiModuleNamedElement" methods=[getName getNameIdentifier setName]}
 
 
 structDefinition ::=
