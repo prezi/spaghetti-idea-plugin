@@ -30,4 +30,8 @@ public interface SpaghettiModuleInterfaceDefinition extends SpaghettiModuleNamed
 
   String getName();
 
+  PsiElement getNameIdentifier();
+
+  PsiElement setName(String newName);
+
 }

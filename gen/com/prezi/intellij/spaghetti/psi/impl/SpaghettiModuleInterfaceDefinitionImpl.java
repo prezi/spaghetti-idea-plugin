@@ -67,4 +67,12 @@ public class SpaghettiModuleInterfaceDefinitionImpl extends SpaghettiModuleNamed
     return SpaghettiModulePsiImplUtil.getName(this);
   }
 
+  public PsiElement getNameIdentifier() {
+    return SpaghettiModulePsiImplUtil.getNameIdentifier(this);
+  }
+
+  public PsiElement setName(String newName) {
+    return SpaghettiModulePsiImplUtil.setName(this, newName);
+  }
+
 }

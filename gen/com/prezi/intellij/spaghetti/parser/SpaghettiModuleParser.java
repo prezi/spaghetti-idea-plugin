@@ -5,7 +5,7 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
 import com.intellij.openapi.diagnostic.Logger;
 import static com.prezi.intellij.spaghetti.psi.SpaghettiModuleTypes.*;
-import static com.prezi.intellij.spaghetti.parser.SpaghettiModuleParserUtil.*;
+import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.tree.TokenSet;
@@ -119,6 +119,9 @@ public class SpaghettiModuleParser implements PsiParser {
     else if (root_ == TYPE_CHAIN) {
       result_ = typeChain(builder_, 0);
     }
+    else if (root_ == TYPE_CHAIN_ARGUMENTS) {
+      result_ = typeChainArguments(builder_, 0);
+    }
     else if (root_ == TYPE_CHAIN_ELEMENT) {
       result_ = typeChainElement(builder_, 0);
     }
@@ -196,7 +199,7 @@ public class SpaghettiModuleParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // '@' id (PL annotationParameters? PR)?
+  // '@' ID (PL annotationParameters? PR)?
   public static boolean annotation(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "annotation")) return false;
     boolean result_;
@@ -235,7 +238,7 @@ public class SpaghettiModuleParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // id '=' annotationValue
+  // ID '=' annotationValue
   public static boolean annotationParameter(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "annotationParameter")) return false;
     if (!nextTokenIs(builder_, ID)) return false;
@@ -340,13 +343,13 @@ public class SpaghettiModuleParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // type | typeChain
+  // typeChain | type
   public static boolean complexType(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "complexType")) return false;
     boolean result_;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<complex type>");
-    result_ = type(builder_, level_ + 1);
-    if (!result_) result_ = typeChain(builder_, level_ + 1);
+    result_ = typeChain(builder_, level_ + 1);
+    if (!result_) result_ = type(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, COMPLEX_TYPE, result_, false, null);
     return result_;
   }
@@ -967,13 +970,13 @@ public class SpaghettiModuleParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // void | complexType
+  // complexType | void
   public static boolean returnType(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "returnType")) return false;
     boolean result_;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<return type>");
-    result_ = consumeToken(builder_, VOID);
-    if (!result_) result_ = complexType(builder_, level_ + 1);
+    result_ = complexType(builder_, level_ + 1);
+    if (!result_) result_ = consumeToken(builder_, VOID);
     exit_section_(builder_, level_, marker_, RETURN_TYPE, result_, false, null);
     return result_;
   }
@@ -1179,6 +1182,74 @@ public class SpaghettiModuleParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // typeChainElement ( '->' typeChainElement &('->' typeChainReturnType) )* | void
+  public static boolean typeChainArguments(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "typeChainArguments")) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<type chain arguments>");
+    result_ = typeChainArguments_0(builder_, level_ + 1);
+    if (!result_) result_ = consumeToken(builder_, VOID);
+    exit_section_(builder_, level_, marker_, TYPE_CHAIN_ARGUMENTS, result_, false, null);
+    return result_;
+  }
+
+  // typeChainElement ( '->' typeChainElement &('->' typeChainReturnType) )*
+  private static boolean typeChainArguments_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "typeChainArguments_0")) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_);
+    result_ = typeChainElement(builder_, level_ + 1);
+    result_ = result_ && typeChainArguments_0_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // ( '->' typeChainElement &('->' typeChainReturnType) )*
+  private static boolean typeChainArguments_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "typeChainArguments_0_1")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!typeChainArguments_0_1_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "typeChainArguments_0_1", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  // '->' typeChainElement &('->' typeChainReturnType)
+  private static boolean typeChainArguments_0_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "typeChainArguments_0_1_0")) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, "->");
+    result_ = result_ && typeChainElement(builder_, level_ + 1);
+    result_ = result_ && typeChainArguments_0_1_0_2(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // &('->' typeChainReturnType)
+  private static boolean typeChainArguments_0_1_0_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "typeChainArguments_0_1_0_2")) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_, level_, _AND_, null);
+    result_ = typeChainArguments_0_1_0_2_0(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, null, result_, false, null);
+    return result_;
+  }
+
+  // '->' typeChainReturnType
+  private static boolean typeChainArguments_0_1_0_2_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "typeChainArguments_0_1_0_2_0")) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, "->");
+    result_ = result_ && typeChainReturnType(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
   // type | '(' typeChain ')'
   public static boolean typeChainElement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "typeChainElement")) return false;
@@ -1203,73 +1274,26 @@ public class SpaghettiModuleParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // void '->' typeChainReturnType | typeChainElement ( '->' typeChainElement )* '->' typeChainReturnType
+  // typeChainArguments '->' typeChainReturnType
   public static boolean typeChainElements(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "typeChainElements")) return false;
     boolean result_;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<type chain elements>");
-    result_ = typeChainElements_0(builder_, level_ + 1);
-    if (!result_) result_ = typeChainElements_1(builder_, level_ + 1);
+    result_ = typeChainArguments(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, "->");
+    result_ = result_ && typeChainReturnType(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, TYPE_CHAIN_ELEMENTS, result_, false, null);
     return result_;
   }
 
-  // void '->' typeChainReturnType
-  private static boolean typeChainElements_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "typeChainElements_0")) return false;
-    boolean result_;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, VOID);
-    result_ = result_ && consumeToken(builder_, "->");
-    result_ = result_ && typeChainReturnType(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // typeChainElement ( '->' typeChainElement )* '->' typeChainReturnType
-  private static boolean typeChainElements_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "typeChainElements_1")) return false;
-    boolean result_;
-    Marker marker_ = enter_section_(builder_);
-    result_ = typeChainElement(builder_, level_ + 1);
-    result_ = result_ && typeChainElements_1_1(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, "->");
-    result_ = result_ && typeChainReturnType(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // ( '->' typeChainElement )*
-  private static boolean typeChainElements_1_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "typeChainElements_1_1")) return false;
-    int pos_ = current_position_(builder_);
-    while (true) {
-      if (!typeChainElements_1_1_0(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "typeChainElements_1_1", pos_)) break;
-      pos_ = current_position_(builder_);
-    }
-    return true;
-  }
-
-  // '->' typeChainElement
-  private static boolean typeChainElements_1_1_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "typeChainElements_1_1_0")) return false;
-    boolean result_;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, "->");
-    result_ = result_ && typeChainElement(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
   /* ********************************************************** */
-  // void | typeChainElement
+  // typeChainElement | void
   public static boolean typeChainReturnType(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "typeChainReturnType")) return false;
     boolean result_;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<type chain return type>");
-    result_ = consumeToken(builder_, VOID);
-    if (!result_) result_ = typeChainElement(builder_, level_ + 1);
+    result_ = typeChainElement(builder_, level_ + 1);
+    if (!result_) result_ = consumeToken(builder_, VOID);
     exit_section_(builder_, level_, marker_, TYPE_CHAIN_RETURN_TYPE, result_, false, null);
     return result_;
   }

@@ -41,6 +41,6 @@
       <fileTypeFactory implementation="com.prezi.intellij.spaghetti.SpaghettiModuleFileTypeFactory"/>
       <lang.parserDefinition language="SpaghettiModule" implementationClass="com.prezi.intellij.spaghetti.SpaghettiModuleParserDefinition"/>
       <lang.syntaxHighlighterFactory key="SpaghettiModule" implementationClass="com.prezi.intellij.spaghetti.SpaghettiModuleSyntaxHighlighterFactory"/>
-
+      <lang.foldingBuilder language="SpaghettiModule" implementationClass="com.prezi.intellij.spaghetti.SpaghettiModuleFoldingBuilder"/>
   </extensions>
 </idea-plugin>

@@ -4,6 +4,8 @@ package com.prezi.intellij.spaghetti.psi;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.PsiElement;
 import com.intellij.lang.ASTNode;
+import com.prezi.intellij.spaghetti.SpaghettiModuleElementType;
+import com.prezi.intellij.spaghetti.SpaghettiModuleTokenType;
 import com.prezi.intellij.spaghetti.psi.impl.*;
 
 public interface SpaghettiModuleTypes {
@@ -41,6 +43,7 @@ public interface SpaghettiModuleTypes {
   IElementType TYPE = new SpaghettiModuleElementType("TYPE");
   IElementType TYPE_ARGUMENTS = new SpaghettiModuleElementType("TYPE_ARGUMENTS");
   IElementType TYPE_CHAIN = new SpaghettiModuleElementType("TYPE_CHAIN");
+  IElementType TYPE_CHAIN_ARGUMENTS = new SpaghettiModuleElementType("TYPE_CHAIN_ARGUMENTS");
   IElementType TYPE_CHAIN_ELEMENT = new SpaghettiModuleElementType("TYPE_CHAIN_ELEMENT");
   IElementType TYPE_CHAIN_ELEMENTS = new SpaghettiModuleElementType("TYPE_CHAIN_ELEMENTS");
   IElementType TYPE_CHAIN_RETURN_TYPE = new SpaghettiModuleElementType("TYPE_CHAIN_RETURN_TYPE");
@@ -61,7 +64,7 @@ public interface SpaghettiModuleTypes {
   IElementType FALSE = new SpaghettiModuleTokenType("false");
   IElementType FLOAT = new SpaghettiModuleTokenType("float");
   IElementType FLOATVALUE = new SpaghettiModuleTokenType("floatValue");
-  IElementType ID = new SpaghettiModuleTokenType("id");
+  IElementType ID = new SpaghettiModuleTokenType("ID");
   IElementType IMPORT = new SpaghettiModuleTokenType("import");
   IElementType INT = new SpaghettiModuleTokenType("int");
   IElementType INTERFACE = new SpaghettiModuleTokenType("interface");
@@ -178,6 +181,9 @@ public interface SpaghettiModuleTypes {
       }
       else if (type == TYPE_CHAIN) {
         return new SpaghettiModuleTypeChainImpl(node);
+      }
+      else if (type == TYPE_CHAIN_ARGUMENTS) {
+        return new SpaghettiModuleTypeChainArgumentsImpl(node);
       }
       else if (type == TYPE_CHAIN_ELEMENT) {
         return new SpaghettiModuleTypeChainElementImpl(node);

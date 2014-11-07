@@ -28,4 +28,10 @@ public class SpaghettiModuleAnnotationImpl extends ASTWrapperPsiElement implemen
     return findChildByClass(SpaghettiModuleAnnotationParameters.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getId() {
+    return findNotNullChildByType(ID);
+  }
+
 }

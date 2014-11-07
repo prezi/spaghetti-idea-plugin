@@ -10,4 +10,7 @@ public interface SpaghettiModuleAnnotation extends PsiElement {
   @Nullable
   SpaghettiModuleAnnotationParameters getAnnotationParameters();
 
+  @NotNull
+  PsiElement getId();
+
 }

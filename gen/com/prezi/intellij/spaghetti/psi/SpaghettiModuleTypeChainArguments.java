@@ -5,12 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface SpaghettiModuleAnnotationParameter extends PsiElement {
+public interface SpaghettiModuleTypeChainArguments extends PsiElement {
 
   @NotNull
-  SpaghettiModuleAnnotationValue getAnnotationValue();
+  List<SpaghettiModuleTypeChainElement> getTypeChainElementList();
 
-  @NotNull
-  PsiElement getId();
+  @Nullable
+  PsiElement getVoid();
 
 }

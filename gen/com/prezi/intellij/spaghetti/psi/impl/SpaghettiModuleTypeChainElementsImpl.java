@@ -24,20 +24,14 @@ public class SpaghettiModuleTypeChainElementsImpl extends ASTWrapperPsiElement i
 
   @Override
   @NotNull
-  public List<SpaghettiModuleTypeChainElement> getTypeChainElementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, SpaghettiModuleTypeChainElement.class);
+  public SpaghettiModuleTypeChainArguments getTypeChainArguments() {
+    return findNotNullChildByClass(SpaghettiModuleTypeChainArguments.class);
   }
 
   @Override
   @NotNull
   public SpaghettiModuleTypeChainReturnType getTypeChainReturnType() {
     return findNotNullChildByClass(SpaghettiModuleTypeChainReturnType.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getVoid() {
-    return findChildByType(VOID);
   }
 
 }

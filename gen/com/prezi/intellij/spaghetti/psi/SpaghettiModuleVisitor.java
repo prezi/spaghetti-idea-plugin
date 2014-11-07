@@ -139,6 +139,10 @@ public class SpaghettiModuleVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitTypeChainArguments(@NotNull SpaghettiModuleTypeChainArguments o) {
+    visitPsiElement(o);
+  }
+
   public void visitTypeChainElement(@NotNull SpaghettiModuleTypeChainElement o) {
     visitPsiElement(o);
   }

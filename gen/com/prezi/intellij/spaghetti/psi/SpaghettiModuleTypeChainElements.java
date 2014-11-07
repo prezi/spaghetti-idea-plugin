@@ -8,12 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface SpaghettiModuleTypeChainElements extends PsiElement {
 
   @NotNull
-  List<SpaghettiModuleTypeChainElement> getTypeChainElementList();
+  SpaghettiModuleTypeChainArguments getTypeChainArguments();
 
   @NotNull
   SpaghettiModuleTypeChainReturnType getTypeChainReturnType();
-
-  @Nullable
-  PsiElement getVoid();
 
 }
