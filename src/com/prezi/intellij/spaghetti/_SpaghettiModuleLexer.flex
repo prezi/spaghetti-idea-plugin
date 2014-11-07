@@ -22,8 +22,11 @@ EOL="\r"|"\n"|"\r\n"
 LINE_WS=[\ \t\f]
 WHITE_SPACE=({LINE_WS}|{EOL})+
 
-ID=[a-zA-Z_0-9]*
 COMMENT=("/"\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+"/")|("//".*)
+FLOATVALUE=[0-9]+(\.[0-9]*)
+INTVALUE=[0-9]+
+STRINGVALUE=(\"([^\"\\]|\\.)*\")
+ID=[a-zA-Z_0-9]*
 
 %%
 <YYINITIAL> {
@@ -47,8 +50,11 @@ COMMENT=("/"\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+"/")|("//".*)
   "true"             { return TRUE; }
   "false"            { return FALSE; }
 
-  {ID}               { return ID; }
   {COMMENT}          { return COMMENT; }
+  {FLOATVALUE}       { return FLOATVALUE; }
+  {INTVALUE}         { return INTVALUE; }
+  {STRINGVALUE}      { return STRINGVALUE; }
+  {ID}               { return ID; }
 
   [^] { return com.intellij.psi.TokenType.BAD_CHARACTER; }
 }

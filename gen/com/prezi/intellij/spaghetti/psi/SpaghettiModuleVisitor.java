@@ -75,15 +75,7 @@ public class SpaghettiModuleVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitFloatValue(@NotNull SpaghettiModuleFloatValue o) {
-    visitPsiElement(o);
-  }
-
   public void visitImportDeclaration(@NotNull SpaghettiModuleImportDeclaration o) {
-    visitPsiElement(o);
-  }
-
-  public void visitIntValue(@NotNull SpaghettiModuleIntValue o) {
     visitPsiElement(o);
   }
 
@@ -136,10 +128,6 @@ public class SpaghettiModuleVisitor extends PsiElementVisitor {
   }
 
   public void visitReturnType(@NotNull SpaghettiModuleReturnType o) {
-    visitPsiElement(o);
-  }
-
-  public void visitStringValue(@NotNull SpaghettiModuleStringValue o) {
     visitPsiElement(o);
   }
 

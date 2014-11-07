@@ -25,11 +25,9 @@ public interface SpaghettiModuleTypes {
   IElementType ENUM_DEFINITION = new SpaghettiModuleElementType("ENUM_DEFINITION");
   IElementType ENUM_VALUE = new SpaghettiModuleElementType("ENUM_VALUE");
   IElementType EXTERN_TYPE_DEFINITION = new SpaghettiModuleElementType("EXTERN_TYPE_DEFINITION");
-  IElementType FLOAT_VALUE = new SpaghettiModuleElementType("FLOAT_VALUE");
   IElementType IMPORT_DECLARATION = new SpaghettiModuleElementType("IMPORT_DECLARATION");
   IElementType INTERFACE_DEFINITION = new SpaghettiModuleElementType("INTERFACE_DEFINITION");
   IElementType INTERFACE_METHOD_DEFINITION = new SpaghettiModuleElementType("INTERFACE_METHOD_DEFINITION");
-  IElementType INT_VALUE = new SpaghettiModuleElementType("INT_VALUE");
   IElementType METHOD_DEFINITION = new SpaghettiModuleElementType("METHOD_DEFINITION");
   IElementType METHOD_PARAMETER = new SpaghettiModuleElementType("METHOD_PARAMETER");
   IElementType METHOD_PARAMETERS = new SpaghettiModuleElementType("METHOD_PARAMETERS");
@@ -43,7 +41,6 @@ public interface SpaghettiModuleTypes {
   IElementType QUALIFIED_NAME = new SpaghettiModuleElementType("QUALIFIED_NAME");
   IElementType RETURN_TYPE = new SpaghettiModuleElementType("RETURN_TYPE");
   IElementType SIGN = new SpaghettiModuleElementType("SIGN");
-  IElementType STRING_VALUE = new SpaghettiModuleElementType("STRING_VALUE");
   IElementType STRUCT_DEFINITION = new SpaghettiModuleElementType("STRUCT_DEFINITION");
   IElementType SUPER_INTERFACE_DEFINITION = new SpaghettiModuleElementType("SUPER_INTERFACE_DEFINITION");
   IElementType TYPE = new SpaghettiModuleElementType("TYPE");
@@ -66,13 +63,16 @@ public interface SpaghettiModuleTypes {
   IElementType EXTERN = new SpaghettiModuleTokenType("extern");
   IElementType FALSE = new SpaghettiModuleTokenType("false");
   IElementType FLOAT = new SpaghettiModuleTokenType("float");
+  IElementType FLOATVALUE = new SpaghettiModuleTokenType("floatValue");
   IElementType ID = new SpaghettiModuleTokenType("ID");
   IElementType IMPORT = new SpaghettiModuleTokenType("import");
   IElementType INT = new SpaghettiModuleTokenType("int");
   IElementType INTERFACE = new SpaghettiModuleTokenType("interface");
+  IElementType INTVALUE = new SpaghettiModuleTokenType("intValue");
   IElementType MODULE = new SpaghettiModuleTokenType("module");
   IElementType NULL = new SpaghettiModuleTokenType("null");
   IElementType STRING = new SpaghettiModuleTokenType("string");
+  IElementType STRINGVALUE = new SpaghettiModuleTokenType("stringValue");
   IElementType STRUCT = new SpaghettiModuleTokenType("struct");
   IElementType TRUE = new SpaghettiModuleTokenType("true");
   IElementType VOID = new SpaghettiModuleTokenType("void");
@@ -125,9 +125,6 @@ public interface SpaghettiModuleTypes {
       else if (type == EXTERN_TYPE_DEFINITION) {
         return new SpaghettiModuleExternTypeDefinitionImpl(node);
       }
-      else if (type == FLOAT_VALUE) {
-        return new SpaghettiModuleFloatValueImpl(node);
-      }
       else if (type == IMPORT_DECLARATION) {
         return new SpaghettiModuleImportDeclarationImpl(node);
       }
@@ -136,9 +133,6 @@ public interface SpaghettiModuleTypes {
       }
       else if (type == INTERFACE_METHOD_DEFINITION) {
         return new SpaghettiModuleInterfaceMethodDefinitionImpl(node);
-      }
-      else if (type == INT_VALUE) {
-        return new SpaghettiModuleIntValueImpl(node);
       }
       else if (type == METHOD_DEFINITION) {
         return new SpaghettiModuleMethodDefinitionImpl(node);
@@ -178,9 +172,6 @@ public interface SpaghettiModuleTypes {
       }
       else if (type == SIGN) {
         return new SpaghettiModuleSignImpl(node);
-      }
-      else if (type == STRING_VALUE) {
-        return new SpaghettiModuleStringValueImpl(node);
       }
       else if (type == STRUCT_DEFINITION) {
         return new SpaghettiModuleStructDefinitionImpl(node);

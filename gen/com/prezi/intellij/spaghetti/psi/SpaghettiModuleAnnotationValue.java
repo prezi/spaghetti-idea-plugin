@@ -11,12 +11,12 @@ public interface SpaghettiModuleAnnotationValue extends PsiElement {
   SpaghettiModuleBoolValue getBoolValue();
 
   @Nullable
-  SpaghettiModuleFloatValue getFloatValue();
+  PsiElement getFloatValue();
 
   @Nullable
-  SpaghettiModuleIntValue getIntValue();
+  PsiElement getIntValue();
 
   @Nullable
-  SpaghettiModuleStringValue getStringValue();
+  PsiElement getStringValue();
 
 }
