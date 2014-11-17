@@ -1,6 +1,15 @@
+#Requirements
 Install the following plugins:
 -grammer-kit
 -plugin devkit
 -psiviewer
 
 Find more info at http://confluence.jetbrains.com/display/IntelliJIDEA/Custom+Language+Support.a
+
+#Build
+Until further development, it needs a few manual steps.
+- delete gen folder
+- remove the line 'parserUtilClass="..."' from SpaghettiModule.bnf
+- right click on the .bnf file add run: Generate Parser Code, Generate JFlex Lexer, Generate Parser Utils
+
+After these you will still have to fix 2 missing imports in the generated code.
